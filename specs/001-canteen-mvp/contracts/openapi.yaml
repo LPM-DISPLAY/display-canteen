@@ -1,0 +1,446 @@
+openapi: 3.1.0
+info:
+  title: DISPLAY Canteen API
+  description: Backend REST API for DISPLAY Canteen MVP - guest ordering, QRIS verification, live order tracking, and PIC admin dashboard.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: /
+    description: Production relative path via Cloudflare Tunnel
+
+paths:
+  /api/menus:
+    get:
+      summary: Get menu catalog
+      description: Returns list of available food and beverage items for customer browsing.
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: all
+          in: query
+          required: false
+          description: If true and authenticated, includes unavailable items for admin.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: List of menu items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenuItem'
+    post:
+      summary: Create new menu item (Admin)
+      security:
+        - AdminSecret: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuCreate'
+      responses:
+        '201':
+          description: Menu item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+
+  /api/menus/{id}:
+    put:
+      summary: Update menu item (Admin)
+      security:
+        - AdminSecret: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuUpdate'
+      responses:
+        '200':
+          description: Menu item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+    delete:
+      summary: Toggle availability or delete menu item (Admin)
+      security:
+        - AdminSecret: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Menu item deleted or disabled
+
+  /api/orders/checkout:
+    post:
+      summary: Create customer order (Guest Checkout)
+      description: Unauthenticated checkout capturing name, WhatsApp number, line items, and payment method.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+
+  /api/orders/{id}:
+    get:
+      summary: Get order details and live status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Order tracking details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '404':
+          description: Order not found
+
+  /api/orders/{id}/upload-proof:
+    post:
+      summary: Upload QRIS transfer receipt
+      description: Uploads image file to Supabase Storage and updates order status to VERIFYING_PAYMENT.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+      responses:
+        '200':
+          description: Receipt uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+
+  /api/orders:
+    get:
+      summary: List all orders for Admin Kanban
+      security:
+        - AdminSecret: []
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [PENDING_PAYMENT, VERIFYING_PAYMENT, PROCESSING, READY, COMPLETED, CANCELLED]
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+
+  /api/orders/{id}/status:
+    put:
+      summary: Update order status (Admin)
+      security:
+        - AdminSecret: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [PENDING_PAYMENT, VERIFYING_PAYMENT, PROCESSING, READY, COMPLETED, CANCELLED]
+              required:
+                - status
+      responses:
+        '200':
+          description: Order status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+
+  /api/reports/dashboard:
+    get:
+      summary: Get shift sales metrics (Admin)
+      security:
+        - AdminSecret: []
+      responses:
+        '200':
+          description: Dashboard metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardMetrics'
+
+  /api/reports/export:
+    get:
+      summary: Export sales transaction recap to CSV (Admin)
+      security:
+        - AdminSecret: []
+      responses:
+        '200':
+          description: CSV file download
+          content:
+            text/csv:
+              schema:
+                type: string
+
+components:
+  securitySchemes:
+    AdminSecret:
+      type: apiKey
+      in: header
+      name: X-Admin-Secret
+
+  schemas:
+    MenuItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        price:
+          type: integer
+        category:
+          type: string
+        image_url:
+          type: string
+          nullable: true
+        prep_time_minutes:
+          type: integer
+        is_available:
+          type: boolean
+
+    MenuCreate:
+      type: object
+      required:
+        - name
+        - price
+        - category
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+        category:
+          type: string
+        image_url:
+          type: string
+        prep_time_minutes:
+          type: integer
+          default: 5
+        is_available:
+          type: boolean
+          default: true
+
+    MenuUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+        category:
+          type: string
+        image_url:
+          type: string
+        prep_time_minutes:
+          type: integer
+        is_available:
+          type: boolean
+
+    OrderItemRequest:
+      type: object
+      required:
+        - menu_id
+        - quantity
+      properties:
+        menu_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          minimum: 1
+        flavors:
+          type: array
+          items:
+            type: string
+          description: Selected flavor variants (e.g., ["Cokelat", "Keju"])
+        notes:
+          type: string
+
+    CheckoutRequest:
+      type: object
+      required:
+        - guest_name
+        - guest_wa
+        - payment_method
+        - items
+      properties:
+        guest_name:
+          type: string
+        guest_wa:
+          type: string
+        payment_method:
+          type: string
+          enum: [CASH, QRIS]
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRequest'
+
+    OrderItemResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        menu_id:
+          type: string
+          format: uuid
+        item_name:
+          type: string
+        flavors:
+          type: array
+          items:
+            type: string
+        item_price:
+          type: integer
+        quantity:
+          type: integer
+        subtotal:
+          type: integer
+        notes:
+          type: string
+          nullable: true
+
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        order_number:
+          type: string
+        guest_name:
+          type: string
+        guest_wa:
+          type: string
+        payment_method:
+          type: string
+          enum: [CASH, QRIS]
+        payment_proof_url:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [PENDING_PAYMENT, VERIFYING_PAYMENT, PROCESSING, READY, COMPLETED, CANCELLED]
+        total_amount:
+          type: integer
+        estimated_ready_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemResponse'
+        wa_notify_url:
+          type: string
+          nullable: true
+          description: Pre-formatted wa.me URL for the admin to click when status is READY.
+
+    DashboardMetrics:
+      type: object
+      properties:
+        total_revenue:
+          type: integer
+        total_orders:
+          type: integer
+        completed_orders:
+          type: integer
+        pending_orders:
+          type: integer
+        payment_breakdown:
+          type: object
+          properties:
+            cash:
+              type: integer
+            qris:
+              type: integer

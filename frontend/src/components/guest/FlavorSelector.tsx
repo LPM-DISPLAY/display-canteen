@@ -92,9 +92,9 @@ export const FlavorSelector: React.FC<FlavorSelectorProps> = ({
               type="button"
               disabled={isMaxReached}
               onClick={() => onToggleFlavor(flavor.name)}
-              className={`relative flex flex-col items-center justify-center p-2.5 rounded-xl border transition-all duration-150 ${
+              className={`relative flex flex-col items-center justify-center py-2 px-1 rounded-xl border transition-all duration-150 ${
                 isSelected
-                  ? `bg-white ${flavor.borderActive} shadow-sm font-bold scale-[1.02]`
+                  ? `bg-white ${flavor.borderActive} shadow-xs font-bold scale-[1.02]`
                   : isMaxReached
                   ? 'bg-slate-50 border-slate-200 text-slate-300 cursor-not-allowed opacity-50'
                   : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50/80 active:scale-95'
@@ -102,17 +102,17 @@ export const FlavorSelector: React.FC<FlavorSelectorProps> = ({
             >
               {/* Flavor dot indicator */}
               <div
-                className="w-5 h-5 rounded-full mb-1 flex items-center justify-center text-white text-[12px] shadow-2xs"
+                className="w-4 h-4 rounded-full mb-0.5 flex items-center justify-center text-white text-[10px] shadow-2xs"
                 style={{ backgroundColor: flavor.color }}
               >
                 {isSelected && (
-                  <span className="material-symbols-outlined text-[14px]">
+                  <span className="material-symbols-outlined text-[12px]">
                     check
                   </span>
                 )}
               </div>
 
-              <span className="text-xs font-medium text-center leading-tight">
+              <span className="text-[11px] font-medium text-center leading-tight">
                 {flavor.name}
               </span>
             </button>

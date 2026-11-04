@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from backend.app.core.database import get_db
 from backend.app.core.config import settings
 from backend.app.models.order import Order, OrderItem
+from backend.app.services.time_util import format_datetime_wib
 
 router = APIRouter()
 
@@ -87,11 +88,11 @@ def export_sales_csv(
 
     for o in orders:
         items_desc = "; ".join(
-            f"{i.quantity}x {i.item_name} [{i.selected_flavors}]" for i in o.items
+            f"{i.quantity}x {i.item_name} [{i.selected_flavors or 'Original'}]" for i in o.items
         )
         writer.writerow([
             o.order_number,
-            o.created_at.strftime("%Y-%m-%d %H:%M:%S") if o.created_at else "",
+            format_datetime_wib(o.created_at, include_seconds=True),
             o.guest_name,
             f"'{o.guest_wa}", # prepend quote to preserve phone string in Excel
             o.payment_method,

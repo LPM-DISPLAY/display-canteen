@@ -1,0 +1,65 @@
+openapi: 3.1.0
+info:
+  title: DISPLAY Canteen API - Feature 002
+  description: Public queue endpoints and order cancellation extensions.
+  version: 1.1.0
+paths:
+  /api/orders/queue:
+    get:
+      summary: Get public order queue (Processing & Ready)
+      description: Returns active orders in PROCESSING and READY states for the public queue display screen (/queue).
+      operationId: getPublicQueue
+      responses:
+        '200':
+          description: Public queue listing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  processing:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicQueueItem'
+                  ready:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicQueueItem'
+                  server_time_wib:
+                    type: string
+
+  /api/orders/{id}/cancel:
+    post:
+      summary: Cancel pending order
+      description: Allows a customer to self-cancel an order only while it is in PENDING_PAYMENT status.
+      operationId: cancelOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Order cancelled successfully
+        '400':
+          description: Order cannot be cancelled because it is already processing or completed.
+        '404':
+          description: Order not found.
+
+components:
+  schemas:
+    PublicQueueItem:
+      type: object
+      properties:
+        order_number:
+          type: string
+        guest_name:
+          type: string
+        status:
+          type: string
+        estimated_ready_at:
+          type: string
+          format: date-time
+          nullable: true

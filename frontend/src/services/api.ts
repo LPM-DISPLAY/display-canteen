@@ -4,6 +4,7 @@ import {
   CheckoutPayload,
   OrderStatus,
   DashboardMetrics,
+  PublicQueueResponse,
 } from '../types';
 
 const API_BASE = '/api';
@@ -17,17 +18,33 @@ export class ApiError extends Error {
 }
 
 async function handleResponse<T>(res: Response): Promise<T> {
+  let text = '';
+  try {
+    text = await res.text();
+  } catch {
+    // If stream reading fails entirely
+  }
+
+  let data: any = null;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = text;
+    }
+  }
+
   if (!res.ok) {
     let errorDetail = 'Terjadi kesalahan sistem';
-    try {
-      const data = await res.json();
-      errorDetail = data.detail || errorDetail;
-    } catch {
-      errorDetail = await res.text() || errorDetail;
+    if (data && typeof data === 'object' && data.detail) {
+      errorDetail = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+    } else if (typeof data === 'string' && data) {
+      errorDetail = data;
     }
     throw new ApiError(errorDetail, res.status);
   }
-  return res.json();
+
+  return data as T;
 }
 
 export const api = {
@@ -84,6 +101,18 @@ export const api = {
   async getOrder(id: string): Promise<Order> {
     const res = await fetch(`${API_BASE}/orders/${id}`);
     return handleResponse<Order>(res);
+  },
+
+  async cancelOrder(orderId: string): Promise<Order> {
+    const res = await fetch(`${API_BASE}/orders/${orderId}/cancel`, {
+      method: 'POST',
+    });
+    return handleResponse<Order>(res);
+  },
+
+  async getPublicQueue(): Promise<PublicQueueResponse> {
+    const res = await fetch(`${API_BASE}/orders/queue`);
+    return handleResponse<PublicQueueResponse>(res);
   },
 
   async uploadProof(orderId: string, file: File): Promise<Order> {

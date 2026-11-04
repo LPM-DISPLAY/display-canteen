@@ -45,3 +45,18 @@ class OrderResponse(BaseModel):
 
 class OrderStatusUpdate(BaseModel):
     status: str = Field(..., pattern="^(PENDING_PAYMENT|VERIFYING_PAYMENT|PROCESSING|READY|COMPLETED|CANCELLED)$")
+
+class PublicQueueItem(BaseModel):
+    id: UUID
+    order_number: str
+    guest_name: str
+    status: str
+    estimated_ready_at: Optional[datetime] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+class PublicQueueResponse(BaseModel):
+    processing: List[PublicQueueItem]
+    ready: List[PublicQueueItem]
+    server_time_wib: str

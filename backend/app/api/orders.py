@@ -13,9 +13,11 @@ from backend.app.schemas.order import (
     CheckoutRequest,
     OrderResponse,
     OrderStatusUpdate,
+    PublicQueueResponse,
 )
 from backend.app.services.queue_calc import calculate_estimated_ready_time
 from backend.app.services.notification import generate_wa_notify_url, format_whatsapp_number
+from backend.app.services.time_util import format_datetime_wib, now_wib
 
 router = APIRouter()
 
@@ -114,6 +116,66 @@ def checkout(payload: CheckoutRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(order)
 
+    return enrich_order_response(order)
+
+@router.get("/queue", response_model=PublicQueueResponse)
+def get_public_queue(db: Session = Depends(get_db)):
+    processing_orders = (
+        db.query(Order)
+        .filter(Order.status == "PROCESSING")
+        .order_by(Order.estimated_ready_at.asc(), Order.created_at.asc())
+        .all()
+    )
+    ready_orders = (
+        db.query(Order)
+        .filter(Order.status == "READY")
+        .order_by(Order.updated_at.desc())
+        .limit(20)
+        .all()
+    )
+
+    return {
+        "processing": [
+            {
+                "id": o.id,
+                "order_number": o.order_number,
+                "guest_name": o.guest_name.split()[0] if o.guest_name else "Tamu",
+                "status": o.status,
+                "estimated_ready_at": o.estimated_ready_at,
+                "created_at": o.created_at,
+            }
+            for o in processing_orders
+        ],
+        "ready": [
+            {
+                "id": o.id,
+                "order_number": o.order_number,
+                "guest_name": o.guest_name.split()[0] if o.guest_name else "Tamu",
+                "status": o.status,
+                "estimated_ready_at": o.estimated_ready_at,
+                "created_at": o.created_at,
+            }
+            for o in ready_orders
+        ],
+        "server_time_wib": format_datetime_wib(now_wib(), include_seconds=True),
+    }
+
+@router.post("/{order_id}/cancel", response_model=OrderResponse)
+def cancel_order(order_id: UUID, db: Session = Depends(get_db)):
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Pesanan tidak ditemukan")
+
+    if order.status != "PENDING_PAYMENT":
+        raise HTTPException(
+            status_code=400,
+            detail=f"Pesanan dalam status {order.status} tidak dapat dibatalkan secara mandiri. Silakan hubungi kasir."
+        )
+
+    order.status = "CANCELLED"
+    order.updated_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(order)
     return enrich_order_response(order)
 
 @router.get("/{order_id}", response_model=OrderResponse)

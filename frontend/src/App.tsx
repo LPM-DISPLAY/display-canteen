@@ -1,9 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { SplashPage } from './pages/SplashPage';
 import { MenuPage } from './pages/MenuPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { StatusPage } from './pages/StatusPage';
+import { PublicQueuePage } from './pages/PublicQueuePage';
 import { AdminKanban } from './pages/AdminKanban';
 import { AdminReports } from './pages/AdminReports';
 
@@ -13,9 +15,11 @@ export const App: React.FC = () => {
       <BrowserRouter>
         <Routes>
           {/* Customer Ordering Routes */}
-          <Route path="/" element={<MenuPage />} />
+          <Route path="/" element={<SplashPage />} />
+          <Route path="/menu" element={<MenuPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders/:id" element={<StatusPage />} />
+          <Route path="/queue" element={<PublicQueuePage />} />
 
           {/* Admin PIC Management Routes */}
           <Route path="/admin" element={<AdminKanban />} />

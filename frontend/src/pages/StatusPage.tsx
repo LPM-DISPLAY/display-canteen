@@ -5,12 +5,14 @@ import { Order } from '../types';
 import { Header } from '../components/common/Header';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { StatusStepper } from '../components/guest/StatusStepper';
+import { formatWIB } from '../services/time';
 
 export const StatusPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [cancelling, setCancelling] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [minutesLeft, setMinutesLeft] = useState<number | null>(null);
 
@@ -43,6 +45,21 @@ export const StatusPage: React.FC = () => {
     const interval = setInterval(fetchOrder, 5000);
     return () => clearInterval(interval);
   }, [id]);
+
+  const handleCancelOrder = async () => {
+    if (!order) return;
+    if (!window.confirm('Yakin ingin membatalkan pesanan ini?')) return;
+
+    setCancelling(true);
+    try {
+      const updated = await api.cancelOrder(order.id);
+      setOrder(updated);
+    } catch (err: any) {
+      alert(err.message || 'Gagal membatalkan pesanan');
+    } finally {
+      setCancelling(false);
+    }
+  };
 
   if (loading && !order) {
     return (
@@ -79,10 +96,7 @@ export const StatusPage: React.FC = () => {
           <div className="flex justify-between items-center">
             <span className="text-xs font-bold text-slate-400">Nomor Pesanan</span>
             <span className="text-xs font-bold text-slate-500">
-              {new Date(order.created_at).toLocaleTimeString('id-ID', {
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
+              {formatWIB(order.created_at)}
             </span>
           </div>
 
@@ -122,10 +136,36 @@ export const StatusPage: React.FC = () => {
               </p>
             </div>
           )}
+
+          {/* Cancellation Notice */}
+          {order.status === 'CANCELLED' && (
+            <div className="bg-rose-50 border border-rose-200 rounded-2xl p-3.5 text-center space-y-1">
+              <p className="text-xs font-bold text-rose-700">Pesanan Telah Dibatalkan</p>
+              <p className="text-[11px] text-rose-600">Pesanan ini tidak akan diproses di dapur.</p>
+            </div>
+          )}
         </div>
 
         {/* Status Stepper Progression */}
         <StatusStepper currentStatus={order.status} />
+
+        {/* Self-service Cancellation Action (Only if PENDING_PAYMENT) */}
+        {order.status === 'PENDING_PAYMENT' && (
+          <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-3.5 space-y-2 text-center">
+            <p className="text-xs text-amber-800 font-medium">
+              Ingin mengubah rasa atau membatalkan pesanan sebelum bayar?
+            </p>
+            <button
+              type="button"
+              onClick={handleCancelOrder}
+              disabled={cancelling}
+              className="w-full py-2 bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 font-bold text-xs rounded-xl shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-[16px]">cancel</span>
+              {cancelling ? 'Membatalkan...' : 'Batalkan Pesanan Ini'}
+            </button>
+          </div>
+        )}
 
         {/* Order Items Breakdown */}
         <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs space-y-2.5">
@@ -144,7 +184,7 @@ export const StatusPage: React.FC = () => {
                     {item.quantity}x {item.item_name}
                   </span>
                   <p className="text-[11px] text-primary font-semibold mt-0.5">
-                    Topping: {item.selected_flavors || 'Original'}
+                    Topping: {item.selected_flavors ? item.selected_flavors : 'Original (Mentega Gurih)'}
                   </p>
                   {item.notes && (
                     <p className="text-[10px] text-slate-400 italic">"{item.notes}"</p>
@@ -172,9 +212,18 @@ export const StatusPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Link to Public Queue Display */}
+        <button
+          onClick={() => navigate('/queue')}
+          className="w-full py-2.5 bg-blue-50/80 hover:bg-blue-100/80 text-primary border border-primary/20 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+        >
+          <span className="material-symbols-outlined text-[16px]">tv</span>
+          Lihat Layar Antrean Monitor Kantin (/queue)
+        </button>
+
         {/* CTA to order again */}
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/menu')}
           className="w-full py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all"
         >
           <span className="material-symbols-outlined text-[16px]">add</span>

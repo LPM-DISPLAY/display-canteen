@@ -223,7 +223,7 @@ export const StatusPage: React.FC = () => {
 
         {/* CTA to order again */}
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/menu')}
           className="w-full py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all"
         >
           <span className="material-symbols-outlined text-[16px]">add</span>

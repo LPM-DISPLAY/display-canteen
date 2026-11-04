@@ -45,7 +45,7 @@ export const CheckoutPage: React.FC = () => {
           Kamu belum memilih Roti Bakar untuk dipesan.
         </p>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/menu')}
           className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-xl shadow-md"
         >
           Pilih Roti Bakar
@@ -139,7 +139,7 @@ export const CheckoutPage: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto min-h-screen bg-[#F8FAFC] flex flex-col pb-12 shadow-lg">
-      <Header showBack onBack={() => navigate('/')} title="Checkout Pesanan" />
+      <Header showBack onBack={() => navigate('/menu')} title="Checkout Pesanan" />
 
       <main className="flex-1 px-4 pt-4 space-y-4">
         {/* Error Notification */}

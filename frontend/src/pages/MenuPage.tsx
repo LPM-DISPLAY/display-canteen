@@ -82,6 +82,8 @@ export const MenuPage: React.FC = () => {
   return (
     <div className="max-w-md mx-auto min-h-screen bg-[#F8FAFC] flex flex-col justify-between pb-24 relative shadow-lg">
       <Header
+        showBack
+        onBack={() => navigate('/')}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenOrders={() => setIsOrdersOpen(true)}
       />

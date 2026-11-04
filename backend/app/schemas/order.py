@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, ConfigDict
 class OrderItemRequest(BaseModel):
     menu_id: UUID
     quantity: int = Field(default=1, ge=1)
-    flavors: List[str] = Field(default_factory=list, description="Selected flavors: Cokelat, Keju, etc.")
+    flavors: List[str] = Field(default_factory=list, max_length=2, description="Selected flavors (maksimal 2): Cokelat, Keju, etc.")
     notes: Optional[str] = None
 
 class CheckoutRequest(BaseModel):

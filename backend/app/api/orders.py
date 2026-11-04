@@ -83,10 +83,15 @@ def checkout(payload: CheckoutRequest, db: Session = Depends(get_db)):
         if not menu:
             raise HTTPException(status_code=404, detail=f"Menu dengan id {item_req.menu_id} tidak ditemukan")
 
-        # Base price + flavor combo pricing (+Rp 3.000 if 2 or more flavors)
+        # Validate maximum 2 toppings per roti bakar
+        if len(item_req.flavors) > 2:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Maksimal 2 jenis rasa topping per roti bakar ({len(item_req.flavors)} dipilih)"
+            )
+
+        # Flat price per roti regardless of number of toppings
         item_price = menu.price
-        if len(item_req.flavors) > 1:
-            item_price += 3000 * (len(item_req.flavors) - 1)
 
         subtotal = item_price * item_req.quantity
         total_amount += subtotal

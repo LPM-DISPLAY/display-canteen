@@ -49,6 +49,8 @@ def test_checkout_cash_and_status():
         order = res.json()
         assert order["guest_name"] == "Test Budi"
         assert order["status"] == "PENDING_PAYMENT"
+        assert order["total_amount"] == 6000
+        assert order["items"][0]["item_price"] == 6000
         assert "Cokelat, Keju" in order["items"][0]["selected_flavors"]
         order_id = order["id"]
 
@@ -78,3 +80,25 @@ def test_checkout_cash_and_status():
         ready_order = ready_res.json()
         assert ready_order["status"] == "READY"
         assert "wa.me" in ready_order["wa_notify_url"]
+
+def test_checkout_max_flavors_exceeded():
+    with TestClient(app) as client:
+        menus = client.get("/api/menus").json()
+        menu_id = menus[0]["id"]
+
+        payload = {
+            "guest_name": "Test Budi",
+            "guest_wa": "081234567890",
+            "payment_method": "CASH",
+            "items": [
+                {
+                    "menu_id": menu_id,
+                    "quantity": 1,
+                    "flavors": ["Cokelat", "Keju", "Strawberry"],
+                    "notes": "Terlalu banyak topping"
+                }
+            ]
+        }
+        res = client.post("/api/orders/checkout", json=payload)
+        # Should be rejected because max_length=2 in schema or 400 in validation
+        assert res.status_code in [400, 422]

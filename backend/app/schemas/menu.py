@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field, ConfigDict
 class MenuBase(BaseModel):
     name: str = Field(..., max_length=100)
     description: Optional[str] = None
-    price: int = Field(ge=0, default=12000)
+    price: int = Field(ge=0, default=6000)
     category: str = Field(default="Roti Bakar", max_length=50)
     image_url: Optional[str] = None
     prep_time_minutes: int = Field(ge=1, default=5)

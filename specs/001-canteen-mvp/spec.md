@@ -100,7 +100,7 @@ As an on-duty canteen PIC completing a shift, I want to manage item availability
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST provide an interactive mobile-optimized Roti Bakar customizer displaying a central toast stage and 6 selectable flavor options (Cokelat, Keju, Strawberry, Blueberry, Tiramisu, Green Tea) without requiring account registration.
+- **FR-001**: The system MUST provide an interactive mobile-optimized Roti Bakar customizer displaying a central toast stage and 6 selectable flavor options (Cokelat, Keju, Strawberry, Blueberry, Tiramisu, Green Tea) with a flat price of Rp 6.000 per roti and a maximum selection of 2 flavor toppings per roti without requiring account registration.
 - **FR-002**: The system MUST trigger an interactive visual bounce animation applying or removing topping layers when a flavor option is selected or deselected on the toast canvas.
 - **FR-003**: The system MUST support an interactive shopping cart allowing guests to add custom Roti Bakar combinations, adjust quantities, review subtotal calculations, and proceed to checkout.
 - **FR-004**: The system MUST capture customer identity at checkout consisting strictly of `guest_name` and `guest_wa` (WhatsApp contact).

@@ -13,7 +13,7 @@ export const MenuManagerModal: React.FC<MenuManagerModalProps> = ({
 }) => {
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editPrice, setEditPrice] = useState<number>(12000);
+  const [editPrice, setEditPrice] = useState<number>(6000);
 
   const fetchMenus = async () => {
     try {

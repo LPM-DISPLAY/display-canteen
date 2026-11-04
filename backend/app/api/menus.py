@@ -30,7 +30,7 @@ def get_menus(
         default_roti = Menu(
             name="Roti Bakar DISPLAY",
             description="Roti bakar tebal krispi di luar, empuk di dalam dengan lelehan mentega gurih.",
-            price=12000,
+            price=6000,
             category="Roti Bakar",
             prep_time_minutes=5,
             is_available=True

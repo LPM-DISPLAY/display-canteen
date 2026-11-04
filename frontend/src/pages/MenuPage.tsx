@@ -36,8 +36,8 @@ export const MenuPage: React.FC = () => {
       if (prev.includes(flavor)) {
         return prev.filter((f) => f !== flavor);
       } else {
-        // Max 3 flavors per toast
-        if (prev.length >= 3) return prev;
+        // Max 2 flavors per roti
+        if (prev.length >= 2) return prev;
         return [...prev, flavor];
       }
     });
@@ -47,10 +47,9 @@ export const MenuPage: React.FC = () => {
     setSelectedFlavors((prev) => prev.filter((f) => f !== flavor));
   };
 
-  // Base price + combo calculation
-  const basePrice = menu?.price || 12000;
-  const comboExtra = selectedFlavors.length > 1 ? (selectedFlavors.length - 1) * 3000 : 0;
-  const unitPrice = basePrice + comboExtra;
+  // Flat price per roti: Rp 6.000 regardless of toppings count (max 2)
+  const basePrice = menu?.price || 6000;
+  const unitPrice = basePrice;
   const itemTotal = unitPrice * quantity;
 
   const handleAddToCart = () => {
@@ -98,11 +97,11 @@ export const MenuPage: React.FC = () => {
             </span>
             <div>
               <p className="text-xs font-bold text-primary">Roti Bakar Hangat & Crispy</p>
-              <p className="text-[11px] text-slate-500 font-medium">Bisa mix hingga 3 rasa topping lezat</p>
+              <p className="text-[11px] text-slate-500 font-medium">Bebas pilih hingga 2 rasa topping lezat</p>
             </div>
           </div>
           <span className="text-xs font-bold text-slate-700 bg-white px-2 py-1 rounded-lg border border-slate-200">
-            Mulai Rp 12rb
+            Rp 6.000 / porsi
           </span>
         </div>
 
@@ -152,7 +151,7 @@ export const MenuPage: React.FC = () => {
           <FlavorSelector
             selectedFlavors={selectedFlavors}
             onToggleFlavor={handleToggleFlavor}
-            maxFlavors={3}
+            maxFlavors={2}
           />
 
           {/* Notes Input */}

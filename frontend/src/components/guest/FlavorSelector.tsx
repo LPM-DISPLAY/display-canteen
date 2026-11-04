@@ -61,7 +61,7 @@ const FLAVORS_CONFIG: {
 export const FlavorSelector: React.FC<FlavorSelectorProps> = ({
   selectedFlavors,
   onToggleFlavor,
-  maxFlavors = 3,
+  maxFlavors = 2,
 }) => {
   return (
     <div className="w-full space-y-2">
@@ -69,9 +69,13 @@ export const FlavorSelector: React.FC<FlavorSelectorProps> = ({
         <label className="text-xs font-bold text-slate-700 tracking-wide uppercase">
           Pilih Varian Rasa ({selectedFlavors.length}/{maxFlavors})
         </label>
-        {selectedFlavors.length > 1 && (
-          <span className="text-[11px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
-            Kombinasi +Rp 3.000
+        {selectedFlavors.length === maxFlavors ? (
+          <span className="text-[11px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+            Maks. 2 Rasa
+          </span>
+        ) : (
+          <span className="text-[11px] font-medium text-slate-400">
+            Bisa pilih hingga 2 rasa
           </span>
         )}
       </div>

@@ -1,17 +1,17 @@
 # Product Requirements Document (PRD): DISPLAY Canteen
 
 ## 1. Project Overview
-**DISPLAY Canteen** adalah aplikasi pemesanan makanan kantin berbasis web yang dirancang untuk anggota organisasi/tamu. Tujuannya adalah mempermudah proses pemesanan makanan melalui *scan* QR code tanpa memerlukan registrasi (login). Sistem akan melacak pesanan menggunakan Nama dan Nomor WhatsApp, memberikan estimasi waktu selesai, serta menyediakan antarmuka kasir (admin) untuk manajemen pesanan dan rekapitulasi penjualan.
+**DISPLAY Canteen** adalah aplikasi pemesanan makanan kantin berbasis web yang dirancang untuk anggota organisasi/tamu. Untuk versi saat ini, DISPLAY Canteen berfokus secara eksklusif menjual **Roti Bakar** dengan kustomisasi rasa interaktif (Cokelat, Keju, Strawberry, Blueberry, Tiramisu, dan Green Tea). Tujuannya adalah mempermudah proses pemesanan melalui *scan* QR code tanpa memerlukan registrasi (login). Sistem akan melacak pesanan menggunakan Nama dan Nomor WhatsApp, memberikan estimasi waktu selesai antrean, serta menyediakan antarmuka kasir (admin) untuk manajemen pesanan dan rekapitulasi penjualan.
 
 ## 2. Target Pengguna
-1. **Pelanggan (User)**: Orang yang datang ke kantin, memindai QR code di meja/stan, dan memesan makanan lewat smartphone.
+1. **Pelanggan (User)**: Orang yang datang ke kantin, memindai QR code di meja/stan, dan mengkustomisasi roti bakar favorit mereka secara visual lewat smartphone.
 2. **Admin/Kasir**: Anggota divisi yang bertugas piket jaga kantin (PIC bisa berganti-ganti tiap hari/shift).
 
 ## 3. Fitur Utama (Core Features)
 
 ### 3.1. Fitur Pelanggan (Frontend User)
-- **Katalog Menu**: Melihat daftar makanan/minuman yang tersedia beserta harga.
-- **Keranjang Belanja**: Menambahkan item dan mengatur jumlah pesanan.
+- **Interactive Roti Bakar Customizer**: Tampilan visual kanvas Roti Bakar di tengah layar. Pelanggan dapat memilih varian rasa (Cokelat, Keju, Strawberry, Blueberry, Tiramisu, Green Tea) dengan animasi *bounce* interaktif saat rasa ditambahkan ke atas roti.
+- **Keranjang Belanja**: Menambahkan kombinasi roti bakar dan mengatur jumlah pesanan.
 - **Checkout Tanpa Login**: Memasukkan "Nama" dan "Nomor WhatsApp" sebagai identitas pesanan.
 - **Pemilihan Pembayaran**:
   - **Cash**: Menampilkan instruksi untuk membayar di kasir.

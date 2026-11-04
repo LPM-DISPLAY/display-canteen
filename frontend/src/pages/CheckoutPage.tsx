@@ -72,6 +72,7 @@ export const CheckoutPage: React.FC = () => {
     }
 
     setSubmitting(true);
+    let createdOrderId: string | null = null;
     try {
       // 1. Checkout
       const checkoutPayload = {
@@ -87,6 +88,7 @@ export const CheckoutPage: React.FC = () => {
       };
 
       const order = await api.checkout(checkoutPayload);
+      createdOrderId = order.id;
 
       // 2. If QRIS, upload proof file
       if (paymentMethod === 'QRIS' && proofFile) {
@@ -111,7 +113,25 @@ export const CheckoutPage: React.FC = () => {
       clearCart();
       navigate(`/orders/${order.id}`);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Gagal memproses pesanan. Silakan coba lagi.');
+      if (createdOrderId) {
+        // If order was created but proof upload had an issue, safely save order and proceed to order status
+        try {
+          localStorage.setItem(
+            'display_canteen_guest',
+            JSON.stringify({
+              active_order_id: createdOrderId,
+              guest_name: guestName.trim(),
+              guest_wa: guestWa.trim(),
+            })
+          );
+        } catch {
+          // ignore
+        }
+        clearCart();
+        navigate(`/orders/${createdOrderId}`);
+      } else {
+        setErrorMsg(err.message || 'Gagal memproses pesanan. Silakan coba lagi.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -283,7 +303,9 @@ export const CheckoutPage: React.FC = () => {
             {submitting ? (
               <span className="inline-flex items-center gap-2">
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Memproses Pesanan...
+                {paymentMethod === 'QRIS'
+                  ? 'Mengunggah Bukti & Memproses...'
+                  : 'Memproses Pesanan...'}
               </span>
             ) : (
               <span>Konfirmasi & Pesan Sekarang</span>

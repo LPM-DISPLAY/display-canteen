@@ -36,8 +36,8 @@ app.add_middleware(
 )
 
 # Serve local uploads fallback
-if os.path.exists(LOCAL_UPLOAD_DIR):
-    app.mount("/uploads", StaticFiles(directory=LOCAL_UPLOAD_DIR), name="uploads")
+os.makedirs(LOCAL_UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=LOCAL_UPLOAD_DIR), name="uploads")
 
 @app.get("/health")
 def health_check():

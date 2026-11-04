@@ -18,17 +18,33 @@ export class ApiError extends Error {
 }
 
 async function handleResponse<T>(res: Response): Promise<T> {
+  let text = '';
+  try {
+    text = await res.text();
+  } catch {
+    // If stream reading fails entirely
+  }
+
+  let data: any = null;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = text;
+    }
+  }
+
   if (!res.ok) {
     let errorDetail = 'Terjadi kesalahan sistem';
-    try {
-      const data = await res.json();
-      errorDetail = data.detail || errorDetail;
-    } catch {
-      errorDetail = await res.text() || errorDetail;
+    if (data && typeof data === 'object' && data.detail) {
+      errorDetail = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+    } else if (typeof data === 'string' && data) {
+      errorDetail = data;
     }
     throw new ApiError(errorDetail, res.status);
   }
-  return res.json();
+
+  return data as T;
 }
 
 export const api = {

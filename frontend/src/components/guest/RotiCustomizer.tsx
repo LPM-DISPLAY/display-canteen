@@ -16,25 +16,20 @@ export const RotiCustomizer: React.FC<RotiCustomizerProps> = ({
   compact = false,
 }) => {
   // Determine split layout if 2 toppings are selected
-  const getSplitSide = (flavor: FlavorVariant): 'left' | 'right' | 'full' => {
+  const getSplitSide = (flavor: FlavorVariant): 'top' | 'bottom' | 'full' => {
     if (selectedFlavors.length <= 1) return 'full';
 
     const [flavor1, flavor2] = selectedFlavors;
     const isJam1 = JAM_FLAVORS.includes(flavor1);
     const isJam2 = JAM_FLAVORS.includes(flavor2);
 
-    // Case 1: Both are jams -> strict 50:50 left-right split
+    // Rule 1: Selai antar selai (e.g. Tiramisu + Green Tea) ditaruh sebelahan (atas & bawah)
     if (isJam1 && isJam2) {
-      return flavor === flavor1 ? 'left' : 'right';
+      return flavor === flavor1 ? 'top' : 'bottom';
     }
 
-    // Case 2: One jam + one sprinkle -> Jam is full base spread, sprinkle is layered full on top
-    if (isJam1 || isJam2) {
-      return 'full';
-    }
-
-    // Case 3: Both are sprinkles (e.g. Cokelat + Keju) -> 50:50 split for clear distinction
-    return flavor === flavor1 ? 'left' : 'right';
+    // Rule 2: Meses + Keju, atau Selai + (Cokelat/Keju) ditaruh bertimpa penuh pada permukaan roti
+    return 'full';
   };
 
   return (

@@ -3,7 +3,7 @@ import { FlavorVariant } from '../../types';
 
 interface ToppingLayerProps {
   flavor: FlavorVariant;
-  splitSide?: 'left' | 'right' | 'full';
+  splitSide?: 'left' | 'right' | 'top' | 'bottom' | 'full';
 }
 
 export const ToppingLayer: React.FC<ToppingLayerProps> = ({
@@ -15,6 +15,10 @@ export const ToppingLayer: React.FC<ToppingLayerProps> = ({
       ? 'url(#clip-left-half)'
       : splitSide === 'right'
       ? 'url(#clip-right-half)'
+      : splitSide === 'top'
+      ? 'url(#clip-top-half)'
+      : splitSide === 'bottom'
+      ? 'url(#clip-bottom-half)'
       : undefined;
 
   switch (flavor) {
@@ -27,6 +31,10 @@ export const ToppingLayer: React.FC<ToppingLayerProps> = ({
               ? 'w-1/2 overflow-hidden left-0'
               : splitSide === 'right'
               ? 'w-1/2 overflow-hidden left-1/2'
+              : splitSide === 'top'
+              ? 'h-1/2 overflow-hidden top-0'
+              : splitSide === 'bottom'
+              ? 'h-1/2 overflow-hidden top-1/2'
               : 'w-full'
           }`}
         >
@@ -118,6 +126,10 @@ export const ToppingLayer: React.FC<ToppingLayerProps> = ({
               ? 'w-1/2 overflow-hidden left-0'
               : splitSide === 'right'
               ? 'w-1/2 overflow-hidden left-1/2'
+              : splitSide === 'top'
+              ? 'h-1/2 overflow-hidden top-0'
+              : splitSide === 'bottom'
+              ? 'h-1/2 overflow-hidden top-1/2'
               : 'w-full'
           }`}
         >
@@ -177,6 +189,12 @@ export const ToppingLayer: React.FC<ToppingLayerProps> = ({
         <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
           <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
             <defs>
+              <clipPath id="clip-top-half">
+                <rect x="0" y="0" width="220" height="108" />
+              </clipPath>
+              <clipPath id="clip-bottom-half">
+                <rect x="0" y="108" width="220" height="92" />
+              </clipPath>
               <clipPath id="clip-left-half">
                 <rect x="0" y="0" width="110" height="200" />
               </clipPath>
@@ -233,6 +251,18 @@ export const ToppingLayer: React.FC<ToppingLayerProps> = ({
         <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
           <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
             <defs>
+              <clipPath id="clip-top-half">
+                <rect x="0" y="0" width="220" height="108" />
+              </clipPath>
+              <clipPath id="clip-bottom-half">
+                <rect x="0" y="108" width="220" height="92" />
+              </clipPath>
+              <clipPath id="clip-left-half">
+                <rect x="0" y="0" width="110" height="200" />
+              </clipPath>
+              <clipPath id="clip-right-half">
+                <rect x="110" y="0" width="110" height="200" />
+              </clipPath>
               <linearGradient id="blueberry-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#4338CA" stopOpacity="0.94" />
                 <stop offset="50%" stopColor="#3730A3" stopOpacity="0.9" />
@@ -280,48 +310,66 @@ export const ToppingLayer: React.FC<ToppingLayerProps> = ({
       );
 
     case 'Tiramisu':
-      // Mascarpone & Espresso Ganache Spread
+      // Mascarpone Cream & Espresso Swirl Spread (Classic Creamy Tiramisu)
       return (
         <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
           <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
             <defs>
+              <clipPath id="clip-top-half">
+                <rect x="0" y="0" width="220" height="108" />
+              </clipPath>
+              <clipPath id="clip-bottom-half">
+                <rect x="0" y="108" width="220" height="92" />
+              </clipPath>
+              <clipPath id="clip-left-half">
+                <rect x="0" y="0" width="110" height="200" />
+              </clipPath>
+              <clipPath id="clip-right-half">
+                <rect x="110" y="0" width="110" height="200" />
+              </clipPath>
               <linearGradient id="tiramisu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#92400E" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="#B45309" stopOpacity="0.88" />
-                <stop offset="100%" stopColor="#78350F" stopOpacity="0.94" />
+                <stop offset="0%" stopColor="#FEF9C3" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#FEF3C7" stopOpacity="0.92" />
+                <stop offset="100%" stopColor="#FDE68A" stopOpacity="0.95" />
               </linearGradient>
             </defs>
 
             <g clipPath={clipId}>
-              {/* Rich Coffee Ganache Spread */}
+              {/* Creamy Mascarpone Base Spread */}
               <path
                 d="M 32 60 Q 70 30 110 50 Q 150 30 188 60 Q 182 110 178 165 Q 110 175 42 165 Q 38 110 32 60 Z"
                 fill="url(#tiramisu-grad)"
               />
-              {/* Mascarpone Cream Waves */}
+              {/* Espresso & Mocha Swirls */}
               <path
                 d="M 40 70 Q 75 88 110 65 T 180 75"
                 fill="none"
-                stroke="#FEF3C7"
-                strokeWidth="7"
+                stroke="#B45309"
+                strokeWidth="4"
                 strokeLinecap="round"
-                opacity="0.85"
+                opacity="0.65"
               />
               <path
                 d="M 35 115 Q 80 135 125 110 T 178 120"
                 fill="none"
-                stroke="#FEF3C7"
-                strokeWidth="7"
+                stroke="#92400E"
+                strokeWidth="4"
                 strokeLinecap="round"
-                opacity="0.85"
+                opacity="0.65"
               />
-              {/* Cocoa Dust Stippling */}
-              <circle cx="55" cy="62" r="2.2" fill="#451A03" />
-              <circle cx="95" cy="78" r="2.5" fill="#451A03" />
-              <circle cx="145" cy="66" r="2.2" fill="#451A03" />
-              <circle cx="70" cy="120" r="2.5" fill="#451A03" />
-              <circle cx="120" cy="112" r="2.2" fill="#451A03" />
-              <circle cx="160" cy="125" r="2.5" fill="#451A03" />
+              {/* Cocoa Dust Powder Stippling */}
+              <circle cx="45" cy="48" r="2.5" fill="#78350F" />
+              <circle cx="75" cy="58" r="3" fill="#92400E" />
+              <circle cx="115" cy="45" r="2.5" fill="#78350F" />
+              <circle cx="155" cy="55" r="3" fill="#92400E" />
+              <circle cx="55" cy="80" r="3" fill="#78350F" />
+              <circle cx="95" cy="78" r="2.8" fill="#92400E" />
+              <circle cx="145" cy="82" r="3" fill="#78350F" />
+              <circle cx="70" cy="120" r="2.8" fill="#92400E" />
+              <circle cx="110" cy="115" r="3" fill="#78350F" />
+              <circle cx="150" cy="125" r="2.8" fill="#92400E" />
+              <circle cx="85" cy="148" r="2.5" fill="#78350F" />
+              <circle cx="130" cy="150" r="2.8" fill="#92400E" />
             </g>
           </svg>
         </div>
@@ -333,6 +381,18 @@ export const ToppingLayer: React.FC<ToppingLayerProps> = ({
         <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
           <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
             <defs>
+              <clipPath id="clip-top-half">
+                <rect x="0" y="0" width="220" height="108" />
+              </clipPath>
+              <clipPath id="clip-bottom-half">
+                <rect x="0" y="108" width="220" height="92" />
+              </clipPath>
+              <clipPath id="clip-left-half">
+                <rect x="0" y="0" width="110" height="200" />
+              </clipPath>
+              <clipPath id="clip-right-half">
+                <rect x="110" y="0" width="110" height="200" />
+              </clipPath>
               <linearGradient id="matcha-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#65A30D" stopOpacity="0.92" />
                 <stop offset="50%" stopColor="#4D7C0F" stopOpacity="0.88" />

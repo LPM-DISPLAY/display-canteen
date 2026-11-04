@@ -20,6 +20,8 @@ __pycache__/
 *$py.class
 *.so
 .Python
+*.db
+*.sqlite3
 env/
 venv/
 ENV/
@@ -51,6 +53,7 @@ yarn-error.log*
 pnpm-debug.log*
 frontend/dist/
 frontend/dist-ssr/
+*.tsbuildinfo
 
 # IDE & Editors
 .vscode/

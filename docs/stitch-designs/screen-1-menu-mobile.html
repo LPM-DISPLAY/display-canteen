@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DISPLAY Canteen - Pemesanan Mandiri</title>
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#00408b",
+            "surface-bright": "#faf8ff",
+            "tertiary-fixed-dim": "#4edea3",
+            "surface-container-high": "#e2e7ff",
+            "on-tertiary-container": "#5debaf",
+            "on-tertiary-fixed-variant": "#005236",
+            "on-primary": "#ffffff",
+            "surface": "#faf8ff",
+            "error-container": "#ffdad6",
+            "tertiary-container": "#006846",
+            "primary-fixed": "#d8e2ff",
+            "surface-tint": "#0d5bbc",
+            "surface-container-highest": "#dae2fd",
+            "on-surface": "#131b2e",
+            "inverse-on-surface": "#eef0ff",
+            "on-secondary-fixed": "#351000",
+            "secondary-container": "#fe6b00",
+            "on-background": "#131b2e",
+            "on-secondary-fixed-variant": "#7a3000",
+            "primary-container": "#0057b8",
+            "on-secondary-container": "#572000",
+            "surface-container-lowest": "#ffffff",
+            "surface-variant": "#dae2fd",
+            "secondary-fixed": "#ffdbcc",
+            "surface-container": "#eaedff",
+            "on-primary-fixed-variant": "#004493",
+            "on-tertiary-fixed": "#002113",
+            "on-secondary": "#ffffff",
+            "tertiary": "#004e33",
+            "secondary": "#a04100",
+            "outline-variant": "#c2c6d4",
+            "error": "#ba1a1a",
+            "surface-dim": "#d2d9f4",
+            "on-tertiary": "#ffffff",
+            "on-primary-container": "#bfd2ff",
+            "inverse-primary": "#adc7ff",
+            "secondary-fixed-dim": "#ffb693",
+            "background": "#faf8ff",
+            "primary-fixed-dim": "#adc7ff",
+            "outline": "#727784",
+            "surface-container-low": "#f2f3ff",
+            "on-surface-variant": "#424752",
+            "inverse-surface": "#283044",
+            "on-error": "#ffffff",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#001a41",
+            "tertiary-fixed": "#6ffbbe"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "1rem",
+            "gutter-mobile": "0.75rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "currency-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "currency-md": ["16px", { "lineHeight": "20px", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen font-body-md text-body-md select-none">
+<!-- Mobile Container Wrapper -->
+<div class="max-w-md mx-auto min-h-screen bg-background relative flex flex-col pb-36 shadow-xl">
+<!-- TopAppBar Component (from Shared Components JSON) -->
+<header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-margin-mobile py-space-sm max-w-lg mx-auto">
+<div class="flex items-center gap-2">
+<span class="text-primary dark:text-inverse-primary text-headline-sm font-headline-sm flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary tracking-tight">
+            DISPLAY Canteen
+          </span>
+</div>
+<!-- Table Indicator Badge & Quick Status Action -->
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-full border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-pulse"></span>
+<span class="text-label-md font-label-md text-primary font-bold">Meja 04</span>
+</div>
+<button aria-label="Notifikasi" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-transform duration-150 relative">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-secondary-container rounded-full"></span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 px-margin-mobile pt-space-md space-y-space-md">
+<!-- Dining Method Segmented Pill Container -->
+<div class="bg-surface-container-low p-1 rounded-xl flex items-center border border-outline-variant">
+<button class="flex-1 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm flex items-center justify-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="table_restaurant">table_restaurant</span>
+          Makan di Sini
+        </button>
+<button class="flex-1 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="takeout_dining">takeout_dining</span>
+          Bungkus
+        </button>
+</div>
+<!-- Search & Promo Tagline Module -->
+<div class="space-y-space-sm">
+<div class="flex items-center gap-2">
+<div class="relative flex-1">
+<span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-xl text-body-md font-body-md placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all shadow-sm" placeholder="Cari menu favoritmu..." type="text"/>
+</div>
+<button aria-label="Filter menu" class="h-[42px] px-3 bg-surface-container-lowest border border-outline-variant rounded-xl text-on-surface flex items-center justify-center shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="tune">tune</span>
+</button>
+</div>
+<!-- Banner / Tagline Promo Card -->
+<div class="bg-primary-fixed border border-primary-fixed-dim/60 rounded-xl p-3 flex items-center justify-between gap-2 shadow-sm">
+<div class="flex items-center gap-2.5">
+<span class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="payments">payments</span>
+</span>
+<div>
+<p class="text-label-md font-label-md text-primary font-bold">Diskon 10% Pembayaran Cashless</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Otomatis terpotong dengan QRIS hari ini! 🍜</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary shrink-0 text-[18px]" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Category Filter Tabs (Horizontal Pill Scroll) -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<h2 class="text-label-lg font-label-lg text-on-surface font-bold tracking-tight">Kategori Pilihan</h2>
+<span class="text-body-sm font-body-sm text-outline">18 Menu Aktif</span>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar py-1 -mx-margin-mobile px-margin-mobile">
+<!-- Active Tab: 'Semua' -->
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-label-md font-bold shadow-sm active:scale-95 transition-transform shrink-0 flex items-center gap-1.5">
+<span>Semua</span>
+</button>
+<!-- Other Tabs -->
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:text-on-surface font-label-md text-label-md active:scale-95 transition-transform shrink-0">
+            Makanan
+          </button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:text-on-surface font-label-md text-label-md active:scale-95 transition-transform shrink-0">
+            Minuman
+          </button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:text-on-surface font-label-md text-label-md active:scale-95 transition-transform shrink-0">
+            Camilan
+          </button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:text-on-surface font-label-md text-label-md active:scale-95 transition-transform shrink-0">
+            Paket Hemat
+          </button>
+</div>
+</div>
+<!-- Food Menu List Cards -->
+<div class="space-y-3 pt-1">
+<!-- Card 1: Nasi Ayam Geprek -->
+<article class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/80 shadow-sm flex gap-3 relative hover:border-primary/40 transition-colors">
+<div class="flex-1 flex flex-col justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">Terlaris</span>
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Tersedia</span>
+<span class="px-1.5 py-0.5 rounded-md bg-secondary-container/15 text-secondary-container font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]" data-icon="local_fire_department">local_fire_department</span>
+                  Pedas Lv.2
+                </span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-bold leading-tight pt-0.5">Nasi Ayam Geprek</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2">Ayam goreng krispi renyah ditumbuk dengan sambal korek bawang segar, lalapan segar &amp; nasi pulen hangat.</p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div>
+<span class="text-currency-md font-currency-md text-primary font-bold">Rp 18.000</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>10-15 mnt</span>
+</div>
+</div>
+<button aria-label="Tambah Nasi Ayam Geprek" class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary flex items-center justify-center font-bold shadow-sm hover:brightness-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0 relative bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A mouthwatering close-up shot of Indonesian Nasi Ayam Geprek on a clean white serving plate. Crispy golden fried chicken smothered in bright red crushed fiery garlic chili sambal, garnished with fresh cucumber slices and fragrant basil. Warm soft daylight cafeteria ambiance, vibrant culinary photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGmGHHglmykrQk_Phnil82alyHWLp9A_XeaQmWCvIrTd9QFMZr2rcQAhChxsmGW9tdOnoxDx_jdXZ2-kxNSh3QNiGz0ygC_iMB6VBxQwveCjOVw_Xv4w-T_ZJ_4jwVxd4cvuVFY-rgIp2z2PXb6T1weLXc7389JK8zfPR2q_hjSQe7Q4yIHIQ2k7Jcr0Tuo_QTcTk0kIqDG-mVne5c_5j7nl_8ochWgsUvose5HGIrn5rubwTPuiZKqjm2HZ4dZoXBLcVfpPppj3ie"/>
+</div>
+</article>
+<!-- Card 2: Mie Goreng Spesial -->
+<article class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/80 shadow-sm flex gap-3 relative hover:border-primary/40 transition-colors">
+<div class="flex-1 flex flex-col justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Tersedia</span>
+<span class="px-1.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm">Gurih</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-bold leading-tight pt-0.5">Mie Goreng Spesial</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2">Mie tumis bumbu rempah dapur, telur mata sapi setengah matang, suwiran ayam, sawi hijau dan taburan bawang goreng.</p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div>
+<span class="text-currency-md font-currency-md text-primary font-bold">Rp 15.000</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>8-12 mnt</span>
+</div>
+</div>
+<button aria-label="Tambah Mie Goreng Spesial" class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary flex items-center justify-center font-bold shadow-sm hover:brightness-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0 relative bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Steaming plate of Indonesian style Mie Goreng Spesial with shiny glazed noodles, topped with a fried sunny-side-up egg, crispy shallots, shredded chicken, and sliced red chili. Clean minimal porcelain bowl setting, natural appetizing lighting showcasing rich savory texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABO5_btvLDsel7MmrCDDN7KDfCtdvaFkSuOOMlIyH7YUK-NZHzmxGxklu4OrLdl9GoXOWJvqGafRfkAzSljP31wqspXz4iveJFPj6cywuD4gw2fIasgAKi-C_FjD-bmOz6tkUzokN8aYrZeNPOG3-mCTTyBeKMSXhQl9xHwzyn3nxMUEuBOOMIK0_qF4HjinvUC7C65bYd08JuvpsOlq8al2WQQlLY1XuZuXlylqIRES2CKnZRz9D0a9Ndxvz3_UXIbpR4ccy8LwkF"/>
+</div>
+</article>
+<!-- Card 3: Es Teh Manis -->
+<article class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/80 shadow-sm flex gap-3 relative hover:border-primary/40 transition-colors">
+<div class="flex-1 flex flex-col justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Segar</span>
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Tersedia</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-bold leading-tight pt-0.5">Es Teh Manis</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2">Teh melati seduh tradisional Jawa dengan gula tebu asli dan es batu kristal melimpah, pelepas dahaga sempurna.</p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div>
+<span class="text-currency-md font-currency-md text-primary font-bold">Rp 5.000</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>3-5 mnt</span>
+</div>
+</div>
+<button aria-label="Tambah Es Teh Manis" class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary flex items-center justify-center font-bold shadow-sm hover:brightness-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0 relative bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A tall condensation-covered glass of iced sweet jasmine tea with sparkling ice cubes and fresh mint garnish. Golden amber tea hue backlit with bright refreshing sunlight in a contemporary minimalist canteen aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpVzROU4B6_68nJ6d4p7ZwvC39LvVaFTZEAZfX_PD-8ZDJSPaIbyQQECbXT2bSdgmr5rsQuvbVnwczlRi9wpZRRsL2y4f-XxkuqZYrfHUDSarBpB7_cpGV20H75aZXaFeram1eWm6QPTQDGZOFCsiLLyPSjpqYGJhX_Fr9grt7aFFJaLZM3F8KDCX0z7UAlbeCZWm40cIpScnfOFvtvRJRPjAIgA50gFoJjDhJ9fTDz1h0ZJFglFZHv9HkkagRd39t3AN2ZlKyYSjO"/>
+</div>
+</article>
+<!-- Card 4: Pisang Bakar Keju Cokelat -->
+<article class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/80 shadow-sm flex gap-3 relative hover:border-primary/40 transition-colors">
+<div class="flex-1 flex flex-col justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">Camilan Populer</span>
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Tersedia</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-bold leading-tight pt-0.5">Pisang Bakar Keju Cokelat</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2">Pisang raja panggang arang lembut disiram kental manis, limpahan keju cheddar parut gurih, dan butiran meses cokelat premium.</p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div>
+<span class="text-currency-md font-currency-md text-primary font-bold">Rp 12.000</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>7-10 mnt</span>
+</div>
+</div>
+<button aria-label="Tambah Pisang Bakar Keju Cokelat" class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary flex items-center justify-center font-bold shadow-sm hover:brightness-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0 relative bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Indonesian grilled banana topped lavishly with grated cheddar cheese, chocolate sprinkles, and drizzled condensed milk. Warm studio food photography with crisp detailing of melting textures and toasted banana caramelization on clean ceramic ware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJxGlVxvrkqXhuHR-SeoZh5ev2zFqN2AJrwc801d83XqoDoezOSc0QRPPD1wCPbi2esRZE4Xku93jzx3ZFp1y4NZWJbCAGgYAN-3BuRI21iUv4ggg46a-Jc2MnofgfOL77-hMT2Ah0yhBITZzHMPkCn3fdk1KjkhqDXuXITgknB73cC_lBNuo4lafYdS2CNBr-9ThFBS7DbG8nrAaEedfUVtp1g6zICMRH-ie2XSgCq1ZZBfCSj9l4TPCQUO_Jr0fx4QnWbp9VxiI1"/>
+</div>
+</article>
+<!-- Card 5: Ayam Bakar Madu -->
+<article class="bg-surface-container-lowest rounded-xl p-3 border border-outline-variant/80 shadow-sm flex gap-3 relative hover:border-primary/40 transition-colors">
+<div class="flex-1 flex flex-col justify-between">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">Tersedia</span>
+<span class="px-1.5 py-0.5 rounded-md bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm">Favorit Chef</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-bold leading-tight pt-0.5">Ayam Bakar Madu</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant line-clamp-2">Paha ayam bakar bumbu kecap madu khas nusantara dengan aroma smoky legit, disajikan bersama sambal terasi dan lalapan segar.</p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<div>
+<span class="text-currency-md font-currency-md text-primary font-bold">Rp 22.000</span>
+<div class="flex items-center gap-1 text-on-surface-variant text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span>
+<span>15-20 mnt</span>
+</div>
+</div>
+<button aria-label="Tambah Ayam Bakar Madu" class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary flex items-center justify-center font-bold shadow-sm hover:brightness-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0 relative bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Succulent Indonesian honey glazed grilled chicken with charred grill marks and glossy golden coating. Served with lime wedge, fiery sambal terasi dip, and cucumber slices on dark stone plate with appetizing warm ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRFQFW7kwB3wzo_NmtT0EISlrWBmLtZq22KTbltboGi9Zi0q34cAfp79yTiKIZA-HvSBm6XH5RC2Wb9i9Iu4ST4PYBohiEgQmwXsjbA6GdS01_cuD4_cJrtonEbOpTyhojmeKC5WZoI00cjBpy7tMl-l4NSoHIPOQYaw9KaM36kwqzc8qRANK1JWUP2J-fpO3cR_8COllBUHcGSjMpGHQ0xBhuepD5Bir50U0U_BLStdgKTPJvkEvDA4C4FECZ5ML6xVDxhBNxz5K9"/>
+</div>
+</article>
+</div>
+</main>
+<!-- Sticky Floating Bottom Cart Summary Bar (Above Bottom Nav) -->
+<div class="fixed bottom-[60px] left-0 w-full z-40 px-margin-mobile pointer-events-none">
+<div class="max-w-md mx-auto pointer-events-auto">
+<div class="bg-primary text-on-primary rounded-xl p-2.5 px-3.5 shadow-xl flex items-center justify-between border border-primary-fixed-dim/30 backdrop-blur-md">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center relative">
+<span class="material-symbols-outlined text-[20px] text-white" data-icon="shopping_bag">shopping_bag</span>
+<span class="absolute -top-1 -right-1 w-4 h-4 bg-secondary-container text-white text-[10px] font-bold rounded-full flex items-center justify-center">2</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-primary-container leading-none">2 Menu • Rp 23.000</p>
+<p class="text-body-sm font-body-sm text-white/80 font-medium">Nasi Ayam Geprek + Es Teh</p>
+</div>
+</div>
+<button class="bg-secondary-container text-on-secondary hover:brightness-105 active:scale-95 transition-transform px-3.5 py-2 rounded-lg font-label-md text-label-md flex items-center gap-1.5 font-bold shadow">
+<span>Bayar</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- BottomNavBar Component (from Shared Components JSON) -->
+<!-- Menu is active tab mapped strictly to label_texts & style_active_navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter-mobile py-space-xs bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-md">
+<div class="max-w-md w-full mx-auto flex justify-around items-center">
+<!-- Tab 1: Menu (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary dark:text-on-primary rounded-xl px-3 py-1 active:scale-95 transition-transform duration-150" href="#menu">
+<span class="material-symbols-outlined text-[22px]" data-icon="restaurant_menu" data-weight="fill" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+<span class="text-label-sm font-label-sm mt-0.5">Menu</span>
+</a>
+<!-- Tab 2: Pesanan (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-3 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container hover:text-on-surface active:scale-95 transition-transform duration-150" href="#pesanan">
+<span class="material-symbols-outlined text-[22px]" data-icon="receipt_long">receipt_long</span>
+<span class="text-label-sm font-label-sm mt-0.5">Pesanan</span>
+</a>
+<!-- Tab 3: Status (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-3 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container hover:text-on-surface active:scale-95 transition-transform duration-150" href="#status">
+<span class="material-symbols-outlined text-[22px]" data-icon="timer">timer</span>
+<span class="text-label-sm font-label-sm mt-0.5">Status</span>
+</a>
+<!-- Tab 4: Bantuan (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-3 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container hover:text-on-surface active:scale-95 transition-transform duration-150" href="#bantuan">
+<span class="material-symbols-outlined text-[22px]" data-icon="support_agent">support_agent</span>
+<span class="text-label-sm font-label-sm mt-0.5">Bantuan</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

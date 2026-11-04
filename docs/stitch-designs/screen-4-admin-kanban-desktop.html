@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DISPLAY Canteen - Panel Kasir & Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            brand: {
+              blue: '#0057B8',
+              blueDark: '#003F88',
+              orange: '#FF6B00',
+              orangeHover: '#E55F00',
+              emerald: '#10B981',
+              emeraldLight: '#ECFDF5',
+              amber: '#F59E0B',
+              rose: '#EF4444'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+    }
+    /* Custom scrollbars for kanban columns */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(226, 232, 240, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- TOP HEADER / CONTROL BAR -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+    <div class="max-w-[1720px] mx-auto px-6 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Identity -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-blue to-blue-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+            <span class="material-symbols-outlined text-[24px]">restaurant</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-[17px] tracking-tight text-slate-900">DISPLAY Canteen</span>
+              <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-brand-blue border border-blue-200 rounded-md">Kasir & POS</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">Panel Operasional & Antrean Pesanan</p>
+          </div>
+        </div>
+
+        <div class="h-6 w-px bg-slate-200 mx-1 hidden md:block"></div>
+
+        <!-- Shift & PIC Badge -->
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200/80 rounded-lg text-emerald-800 text-xs font-semibold">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span>Shift Aktif: <strong class="text-emerald-950">PIC Jaga (Siti Aminah)</strong></span>
+          <span class="text-emerald-500">•</span>
+          <span class="text-emerald-700 font-mono text-[11px]">POS Terminal #01</span>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Summary -->
+      <div class="flex items-center gap-3">
+        <!-- Metric badge: 12 Pesanan Aktif -->
+        <div class="flex items-center gap-2.5 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-sm">
+          <span class="material-symbols-outlined text-brand-blue text-[20px]">receipt_long</span>
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-none">Total Antrean</div>
+            <div class="text-sm font-extrabold text-slate-900 leading-tight">12 <span class="text-xs font-semibold text-slate-500 font-sans">Pesanan Aktif</span></div>
+          </div>
+        </div>
+
+        <!-- Omzet Hari Ini -->
+        <div class="hidden lg:flex items-center gap-2.5 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-sm">
+          <span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 leading-none">Omzet Kasir Hari Ini</div>
+            <div class="text-sm font-mono font-bold text-slate-900 leading-tight">Rp 2.485.000 <span class="text-[10px] text-emerald-600 font-semibold">(84 Transaksi)</span></div>
+          </div>
+        </div>
+
+        <div class="h-6 w-px bg-slate-200 mx-1"></div>
+
+        <!-- Sound Notification Toggle & Action -->
+        <button class="relative p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors" title="Suara Notifikasi Aktif">
+          <span class="material-symbols-outlined text-[22px]">volume_up</span>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-emerald rounded-full"></span>
+        </button>
+
+        <button class="flex items-center gap-2 px-3.5 py-2 bg-brand-blue hover:bg-brand-blueDark text-white font-semibold text-xs rounded-xl shadow-sm shadow-blue-600/20 transition-all active:scale-[0.98]">
+          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+          <span>Pesanan Manual Kasir</span>
+        </button>
+
+        <!-- Current Clock -->
+        <div class="text-right hidden sm:block pl-1">
+          <div class="text-xs font-mono font-bold text-slate-800" id="live-clock">12:42:15 WIB</div>
+          <div class="text-[10px] text-slate-400 font-medium">Jumat, 24 Mei 2024</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECONDARY FILTER & SEARCH BAR -->
+  <div class="bg-white border-b border-slate-200/90 py-2.5 px-6">
+    <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+      
+      <!-- Filter Chips & Search -->
+      <div class="flex items-center gap-2 flex-1 max-w-xl">
+        <div class="relative w-72">
+          <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+          <input type="text" placeholder="Cari No. Order (#ORD-), Pemesan, Meja..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-brand-blue focus:bg-white transition-all placeholder:text-slate-400" />
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white font-semibold">Semua Stan</button>
+          <button class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200/80 text-slate-700 font-medium transition-colors">Stan 01: Soto & Bakso</button>
+          <button class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200/80 text-slate-700 font-medium transition-colors">Stan 03: Selera Nusantara</button>
+          <button class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200/80 text-slate-700 font-medium transition-colors">Stan 05: Aneka Minuman</button>
+        </div>
+      </div>
+
+      <!-- Live Sync status and quick toggle -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1.5 text-slate-500 font-medium">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Sinkronisasi Otomatis WebSocket: <span class="text-slate-700 font-semibold">Aktif</span></span>
+        </div>
+
+        <button class="flex items-center gap-1 px-2.5 py-1 text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg font-medium transition-colors" title="Muat Ulang Data">
+          <span class="material-symbols-outlined text-[15px]">refresh</span>
+          <span>Refresh</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- KANBAN BOARD WRAPPER -->
+  <main class="flex-1 p-6 max-w-[1720px] w-full mx-auto overflow-hidden">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 h-[calc(100vh-140px)] min-h-[700px]">
+      
+      <!-- ========================================================================= -->
+      <!-- COLUMN 1: MENUNGGU PEMBAYARAN CASH -->
+      <!-- ========================================================================= -->
+      <section class="flex flex-col bg-slate-100/80 rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        
+        <!-- Column Header -->
+        <div class="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-700 border border-amber-200/70 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[18px]">payments</span>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                1. Menunggu Pembayaran Cash
+              </h2>
+              <p class="text-[10px] text-slate-500">Pelanggan bayar tunai ke meja kasir</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-bold bg-amber-100 text-amber-800 rounded-full font-mono">2</span>
+        </div>
+
+        <!-- Column Card Stream -->
+        <div class="flex-1 p-3 overflow-y-auto space-y-3">
+
+          <!-- Card 1.1: Meja 02 -->
+          <article class="bg-white rounded-xl border border-amber-200/80 p-3.5 shadow-sm hover:shadow-md transition-all border-l-4 border-l-amber-500">
+            <!-- Header Card -->
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-028</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 02</span>
+                  <span class="text-[10px] text-slate-400 font-mono">2 mnt lalu</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Dian Pratama</h3>
+                <p class="text-[11px] text-slate-500 font-mono">081987654321</p>
+              </div>
+              <div class="text-right">
+                <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-amber-50 text-amber-700 border border-amber-200">Menunggu Kasir</span>
+              </div>
+            </div>
+
+            <!-- Items ordered -->
+            <div class="space-y-1 mb-3 text-xs bg-slate-50/70 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong class="text-brand-blue">1x</strong> Mie Goreng Spesial</span>
+                <span class="font-mono text-slate-600">Rp 15.000</span>
+              </div>
+              <div class="text-[11px] text-slate-500 pl-4 italic">Pedas sedang, telur mata sapi</div>
+              <div class="flex justify-between items-center text-slate-800 pt-0.5">
+                <span class="font-medium"><strong class="text-brand-blue">1x</strong> Es Jeruk Murni</span>
+                <span class="font-mono text-slate-600">Rp 7.000</span>
+              </div>
+            </div>
+
+            <!-- Total Calculation -->
+            <div class="flex items-center justify-between mb-3 px-1">
+              <span class="text-xs font-semibold text-slate-500">Total Tagihan Cash:</span>
+              <span class="text-sm font-extrabold font-mono text-slate-900">Rp 22.000</span>
+            </div>
+
+            <!-- Quick Action Button -->
+            <div class="grid grid-cols-1 gap-1.5">
+              <button class="w-full py-2 px-3 bg-brand-blue hover:bg-brand-blueDark text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                <span>Terima Cash & Proses</span>
+              </button>
+              <div class="flex gap-1.5">
+                <button class="flex-1 py-1 px-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-[11px] rounded transition-colors text-center">
+                  Cetak Struk
+                </button>
+                <button class="py-1 px-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-[11px] rounded transition-colors">
+                  Batal
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 1.2: Meja 09 -->
+          <article class="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-sm hover:shadow-md transition-all border-l-4 border-l-amber-400">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-029</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-purple-100 text-purple-700">Takeaway (Bungkus)</span>
+                  <span class="text-[10px] text-slate-400 font-mono">5 mnt lalu</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Rizky Ramadhan</h3>
+                <p class="text-[11px] text-slate-500 font-mono">085211223344</p>
+              </div>
+              <div class="text-right">
+                <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-amber-50 text-amber-700 border border-amber-200">Di Depan Kasir</span>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-3 text-xs bg-slate-50/70 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong class="text-brand-blue">2x</strong> Ayam Bakar Madu</span>
+                <span class="font-mono text-slate-600">Rp 44.000</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-800 pt-0.5">
+                <span class="font-medium"><strong class="text-brand-blue">2x</strong> Nasi Putih Tambah</span>
+                <span class="font-mono text-slate-600">Rp 8.000</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-3 px-1">
+              <span class="text-xs font-semibold text-slate-500">Total Tagihan Cash:</span>
+              <span class="text-sm font-extrabold font-mono text-slate-900">Rp 52.000</span>
+            </div>
+
+            <button class="w-full py-2 px-3 bg-brand-blue hover:bg-brand-blueDark text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">check_circle</span>
+              <span>Terima Cash & Proses</span>
+            </button>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- COLUMN 2: VERIFIKASI PEMBAYARAN QRIS -->
+      <!-- ========================================================================= -->
+      <section class="flex flex-col bg-slate-100/80 rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        
+        <!-- Column Header -->
+        <div class="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-orange-50 text-brand-orange border border-orange-200/70 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                2. Verifikasi Pembayaran QRIS
+              </h2>
+              <p class="text-[10px] text-slate-500">Cek mutasi & bukti transfer pembeli</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-bold bg-orange-100 text-orange-800 rounded-full font-mono">3</span>
+        </div>
+
+        <!-- Column Card Stream -->
+        <div class="flex-1 p-3 overflow-y-auto space-y-3">
+
+          <!-- Card 2.1: Priority Verification (Budi Santoso) -->
+          <article class="bg-white rounded-xl border-2 border-brand-orange/60 p-3.5 shadow-md transition-all relative">
+            <div class="absolute -top-2.5 right-3 bg-brand-orange text-white text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full shadow-sm tracking-wider flex items-center gap-1">
+              <span class="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span>
+              Bukti Baru Masuk
+            </div>
+
+            <!-- Header -->
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-brand-blue bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">#ORD-024</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 04</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Budi Santoso</h3>
+                <p class="text-[11px] text-slate-500 font-mono">081234567890</p>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-mono text-slate-400">12:34 WIB</span>
+                <div class="mt-1">
+                  <span class="px-1.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded border border-emerald-200">Stan 03</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Items -->
+            <div class="space-y-1 mb-2.5 text-xs bg-slate-50/80 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong class="text-brand-orange">1x</strong> Nasi Ayam Geprek (Pedas Lv.2)</span>
+                <span class="font-mono text-slate-600">Rp 18.000</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-800 pt-0.5">
+                <span class="font-medium"><strong class="text-brand-orange">1x</strong> Es Teh Manis (Dingin)</span>
+                <span class="font-mono text-slate-600">Rp 5.000</span>
+              </div>
+            </div>
+
+            <!-- Total Amount -->
+            <div class="flex items-center justify-between mb-3 px-1 bg-orange-50/50 py-1 rounded">
+              <span class="text-xs font-bold text-slate-600">Total QRIS:</span>
+              <span class="text-sm font-extrabold font-mono text-brand-orange">Rp 23.000</span>
+            </div>
+
+            <!-- Receipt Thumbnail Preview -->
+            <div class="mb-3 p-2 bg-slate-50 border border-dashed border-slate-300 rounded-xl">
+              <div class="flex items-center justify-between text-[11px] text-slate-600 mb-1.5 font-medium">
+                <span class="flex items-center gap-1 font-semibold text-slate-800">
+                  <span class="material-symbols-outlined text-[15px] text-emerald-600">image</span>
+                  Bukti Transfer Pelanggan
+                </span>
+                <button class="text-brand-blue hover:underline font-bold text-[10px] flex items-center gap-0.5">
+                  <span class="material-symbols-outlined text-[13px]">zoom_in</span> Perbesar
+                </button>
+              </div>
+
+              <!-- Mockup receipt image thumbnail preview -->
+              <div class="flex items-center gap-2.5 bg-white p-2 rounded-lg border border-slate-200">
+                <div class="w-14 h-14 bg-slate-100 rounded-md border border-slate-200 flex-shrink-0 relative overflow-hidden flex flex-col items-center justify-center p-1 text-center group cursor-pointer">
+                  <!-- Small simulated receipt preview graphic -->
+                  <div class="w-full h-full bg-emerald-50 rounded flex flex-col items-center justify-center border border-emerald-200">
+                    <span class="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
+                    <span class="text-[7px] font-mono font-bold text-emerald-800 leading-none mt-0.5">BCA QRIS</span>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-[11px] font-bold text-slate-800 truncate">BCA Mobile - M-Transfer</div>
+                  <div class="text-[10px] text-slate-500 font-mono">Ref: QRIS-89472190</div>
+                  <div class="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[12px]">check</span>
+                    Nominal Cocok: Rp 23.000
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons: Verifikasi & Masak (Orange #FF6B00) and Tolak -->
+            <div class="flex items-center gap-2">
+              <button class="flex-1 py-2 px-3 bg-[#FF6B00] hover:bg-[#E55F00] text-white font-bold text-xs rounded-lg shadow-sm shadow-orange-500/20 flex items-center justify-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-[18px]">skillet</span>
+                <span>Verifikasi & Masak</span>
+              </button>
+              <button class="py-2 px-3 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-lg border border-slate-200 transition-colors" title="Tolak Bukti Transfer">
+                Tolak
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 2.2: Second QRIS Order (Meja 07) -->
+          <article class="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-brand-blue bg-blue-50 px-1.5 py-0.5 rounded">#ORD-025</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 07</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Nadira Aurelia</h3>
+                <p class="text-[11px] text-slate-500 font-mono">087812349900</p>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-mono text-slate-400">12:37 WIB</span>
+                <div class="mt-1">
+                  <span class="px-1.5 py-0.5 bg-blue-50 text-brand-blue text-[10px] font-bold rounded border border-blue-200">Stan 01</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-2.5 text-xs bg-slate-50/80 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong class="text-brand-orange">1x</strong> Soto Betawi Daging Sapi</span>
+                <span class="font-mono text-slate-600">Rp 28.000</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-800 pt-0.5">
+                <span class="font-medium"><strong class="text-brand-orange">1x</strong> Nasi Putih + Emping</span>
+                <span class="font-mono text-slate-600">Rp 6.000</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-3 px-1">
+              <span class="text-xs font-semibold text-slate-500">Total QRIS:</span>
+              <span class="text-sm font-extrabold font-mono text-slate-900">Rp 34.000</span>
+            </div>
+
+            <!-- Receipt preview -->
+            <div class="mb-3 p-2 bg-slate-50 border border-dashed border-slate-300 rounded-xl">
+              <div class="flex items-center gap-2.5 bg-white p-2 rounded-lg border border-slate-200">
+                <div class="w-12 h-12 bg-blue-50 rounded border border-blue-200 flex flex-col items-center justify-center p-1 text-center">
+                  <span class="material-symbols-outlined text-blue-600 text-[18px]">receipt</span>
+                  <span class="text-[7px] font-mono font-bold text-blue-800">GoPay</span>
+                </div>
+                <div class="flex-1 min-w-0 text-left">
+                  <div class="text-[11px] font-bold text-slate-800 truncate">GoPay QRIS Merchant</div>
+                  <div class="text-[10px] text-slate-400 font-mono truncate">ID: GP-981102910</div>
+                  <div class="text-[10px] text-emerald-600 font-bold">Nominal: Rp 34.000</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button class="flex-1 py-2 px-3 bg-[#FF6B00] hover:bg-[#E55F00] text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-[18px]">skillet</span>
+                <span>Verifikasi & Masak</span>
+              </button>
+              <button class="py-2 px-3 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-lg border border-slate-200 transition-colors">
+                Tolak
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 2.3: Third QRIS Order (Meja 11) -->
+          <article class="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-brand-blue bg-slate-100 px-1.5 py-0.5 rounded">#ORD-027</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 11</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Farhan Akbar</h3>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-mono text-slate-400">12:39 WIB</span>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-2.5 text-xs bg-slate-50/80 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong class="text-brand-orange">1x</strong> Pisang Bakar Keju Cokelat</span>
+                <span class="font-mono text-slate-600">Rp 12.000</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-3 px-1">
+              <span class="text-xs font-semibold text-slate-500">Total QRIS:</span>
+              <span class="text-sm font-extrabold font-mono text-slate-900">Rp 12.000</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button class="flex-1 py-2 px-3 bg-[#FF6B00] hover:bg-[#E55F00] text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors">
+                <span class="material-symbols-outlined text-[18px]">skillet</span>
+                <span>Verifikasi & Masak</span>
+              </button>
+              <button class="py-2 px-3 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-bold text-xs rounded-lg border border-slate-200 transition-colors">
+                Tolak
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- COLUMN 3: SEDANG DIMASAK (DAPUR) -->
+      <!-- ========================================================================= -->
+      <section class="flex flex-col bg-slate-100/80 rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        
+        <!-- Column Header -->
+        <div class="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-blue-50 text-brand-blue border border-blue-200/70 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[18px]">soup_kitchen</span>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                3. Sedang Dimasak
+              </h2>
+              <p class="text-[10px] text-slate-500">Stan makanan memproses sajian</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-bold bg-blue-100 text-brand-blue rounded-full font-mono">4</span>
+        </div>
+
+        <!-- Column Card Stream -->
+        <div class="flex-1 p-3 overflow-y-auto space-y-3">
+
+          <!-- Card 3.1: Active Cooking (Elapsed Time) -->
+          <article class="bg-white rounded-xl border border-blue-200 p-3.5 shadow-sm hover:shadow-md transition-all border-l-4 border-l-brand-blue">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-021</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 03</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Hendro Wicaksono</h3>
+                <p class="text-[11px] text-slate-500 font-mono">081377889911</p>
+              </div>
+
+              <!-- Elapsed time timer badge -->
+              <div class="text-right">
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-100 text-orange-800 text-xs font-mono font-bold shadow-xs">
+                  <span class="material-symbols-outlined text-[14px] animate-spin text-brand-orange">hourglass_top</span>
+                  <span>08:45</span>
+                </div>
+                <div class="text-[9px] text-slate-400 mt-0.5">Est. 12 mnt</div>
+              </div>
+            </div>
+
+            <!-- Items -->
+            <div class="space-y-1 mb-3 text-xs bg-slate-50/70 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong>2x</strong> Ayam Geprek Sambal Matah</span>
+                <span class="text-[11px] font-semibold text-brand-blue">Stan 03</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-800 pt-0.5">
+                <span class="font-medium"><strong>2x</strong> Es Jeruk Nipis</span>
+                <span class="text-[11px] font-semibold text-brand-blue">Stan 05</span>
+              </div>
+            </div>
+
+            <!-- Preparation Progress Bar -->
+            <div class="mb-3">
+              <div class="flex justify-between text-[10px] font-semibold text-slate-500 mb-1">
+                <span>Progres Dapur</span>
+                <span class="text-brand-blue font-bold">70% (Hampir Selesai)</span>
+              </div>
+              <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                <div class="bg-brand-blue h-full rounded-full" style="width: 70%"></div>
+              </div>
+            </div>
+
+            <!-- WA Notification CTA -->
+            <button class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+              <!-- WhatsApp SVG Icon -->
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.58 1.961.947 2.796.947 3.179 0 5.766-2.587 5.767-5.766.001-3.181-2.584-5.768-5.767-5.768zm3.393 8.309c-.144.405-.837.774-1.17.824-.312.045-.694.077-2.18-.539-1.905-.788-3.125-2.736-3.22-2.862-.095-.127-.775-1.031-.775-1.966 0-.935.49-1.393.664-1.583.174-.191.38-.239.507-.239.127 0 .254.001.365.006.118.006.277-.044.433.332.162.392.551 1.346.6 1.446.049.1.082.217.016.347-.066.13-.099.211-.197.325-.098.114-.207.255-.296.342-.099.096-.202.2-.087.397.115.197.512.845 1.099 1.367.755.672 1.391.88 1.589.978.198.098.314.082.43-.051.116-.133.498-.58.631-.779.133-.198.266-.165.449-.098.183.067 1.159.546 1.359.646.2.1.333.15.382.233.049.083.049.48-.095.885z"/>
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 1.891.528 3.659 1.443 5.168L2 22l4.98-1.306C8.423 21.554 10.15 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.067c-1.637 0-3.18-.46-4.502-1.258l-.323-.193-2.964.777.791-2.89-.211-.336C3.93 14.805 3.467 13.432 3.467 12c0-4.705 3.828-8.533 8.533-8.533 4.705 0 8.533 3.828 8.533 8.533 0 4.705-3.828 8.533-8.533 8.533z"/>
+              </svg>
+              <span>Siap Diambil - Kabari via WhatsApp</span>
+            </button>
+          </article>
+
+          <!-- Card 3.2: Cooking Order (Elapsed Time 14m) -->
+          <article class="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-022</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 08</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Anisa Rahmawati</h3>
+              </div>
+              <div class="text-right">
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-50 text-red-700 text-xs font-mono font-bold border border-red-200">
+                  <span class="material-symbols-outlined text-[14px]">timer</span>
+                  <span>14:10</span>
+                </div>
+                <div class="text-[9px] text-red-500 font-semibold mt-0.5">Mendekati Target</div>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-3 text-xs bg-slate-50/70 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong>1x</strong> Nasi Goreng Kampung</span>
+                <span class="text-[11px] font-semibold text-brand-blue">Stan 03</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-800 pt-0.5">
+                <span class="font-medium"><strong>1x</strong> Es Cincau Susu</span>
+                <span class="text-[11px] font-semibold text-brand-blue">Stan 05</span>
+              </div>
+            </div>
+
+            <button class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-2 transition-colors">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.891.528 3.659 1.443 5.168L2 22l4.98-1.306C8.423 21.554 10.15 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.067c-1.637 0-3.18-.46-4.502-1.258l-.323-.193-2.964.777.791-2.89-.211-.336C3.93 14.805 3.467 13.432 3.467 12c0-4.705 3.828-8.533 8.533-8.533 4.705 0 8.533 3.828 8.533 8.533 0 4.705-3.828 8.533-8.533 8.533z"/></svg>
+              <span>Siap Diambil - Kabari via WhatsApp</span>
+            </button>
+          </article>
+
+          <!-- Card 3.3: Cooking Order (Elapsed 03:20) -->
+          <article class="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-023</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 05</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Kevin Sanjaya</h3>
+              </div>
+              <div class="text-right">
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-mono font-bold">
+                  <span class="material-symbols-outlined text-[14px]">timelapse</span>
+                  <span>03:20</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-3 text-xs bg-slate-50/70 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium"><strong>2x</strong> Batagor Kuah Komplit</span>
+                <span class="text-[11px] font-semibold text-brand-blue">Stan 02</span>
+              </div>
+            </div>
+
+            <button class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-2 transition-colors">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.891.528 3.659 1.443 5.168L2 22l4.98-1.306C8.423 21.554 10.15 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.067c-1.637 0-3.18-.46-4.502-1.258l-.323-.193-2.964.777.791-2.89-.211-.336C3.93 14.805 3.467 13.432 3.467 12c0-4.705 3.828-8.533 8.533-8.533 4.705 0 8.533 3.828 8.533 8.533 0 4.705-3.828 8.533-8.533 8.533z"/></svg>
+              <span>Siap Diambil - Kabari via WhatsApp</span>
+            </button>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- COLUMN 4: SIAP DIAMBIL (READY FOR PICKUP) -->
+      <!-- ========================================================================= -->
+      <section class="flex flex-col bg-slate-100/80 rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        
+        <!-- Column Header -->
+        <div class="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200/70 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
+                4. Siap Diambil
+              </h2>
+              <p class="text-[10px] text-slate-500">Tersedia di meja counter pickup</p>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 text-xs font-bold bg-emerald-100 text-emerald-800 rounded-full font-mono">3</span>
+        </div>
+
+        <!-- Column Card Stream -->
+        <div class="flex-1 p-3 overflow-y-auto space-y-3">
+
+          <!-- Card 4.1: Ready for pickup (WA sent) -->
+          <article class="bg-white rounded-xl border border-emerald-200 p-3.5 shadow-sm hover:shadow-md transition-all border-l-4 border-l-emerald-500">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-019</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 01</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Rangga Dwi Putra</h3>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                  <span class="material-symbols-outlined text-[12px]">done_all</span>
+                  WA Terkirim
+                </span>
+                <div class="text-[10px] text-slate-400 mt-0.5">Menunggu: 3 mnt</div>
+              </div>
+            </div>
+
+            <!-- Items summary -->
+            <div class="space-y-1 mb-3 text-xs bg-emerald-50/40 p-2 rounded-lg border border-emerald-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium">1x Nasi Campur Bali Komplit</span>
+                <span class="font-mono text-slate-600">Stan 03</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-800 pt-0.5">
+                <span class="font-medium">1x Es Kopi Susu Aren</span>
+                <span class="font-mono text-slate-600">Stan 05</span>
+              </div>
+            </div>
+
+            <!-- Shelf / Counter Pin -->
+            <div class="flex items-center justify-between text-xs mb-3 px-1 text-slate-600">
+              <span class="font-medium">Posisi Rak Pengambilan:</span>
+              <span class="font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">LOKER A-02</span>
+            </div>
+
+            <!-- Complete Order CTA -->
+            <button class="w-full py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors">
+              <span class="material-symbols-outlined text-[18px] text-emerald-400">task_alt</span>
+              <span>Selesaikan Pesanan</span>
+            </button>
+          </article>
+
+          <!-- Card 4.2: Ready for pickup (Meja 10) -->
+          <article class="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-020</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-purple-100 text-purple-700">Takeaway</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Dewi Lestari</h3>
+              </div>
+              <div class="text-right">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                  <span class="material-symbols-outlined text-[12px]">done_all</span>
+                  WA Terkirim
+                </span>
+                <div class="text-[10px] text-slate-400 mt-0.5">Menunggu: 1 mnt</div>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-3 text-xs bg-slate-50/70 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium">3x Pisang Bakar Keju Cokelat</span>
+                <span class="font-mono text-slate-600">Stan 04</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs mb-3 px-1 text-slate-600">
+              <span class="font-medium">Posisi Rak Pengambilan:</span>
+              <span class="font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">LOKER B-01</span>
+            </div>
+
+            <button class="w-full py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors">
+              <span class="material-symbols-outlined text-[18px] text-emerald-400">task_alt</span>
+              <span>Selesaikan Pesanan</span>
+            </button>
+          </article>
+
+          <!-- Card 4.3: Ready for pickup (Meja 06) -->
+          <article class="bg-white rounded-xl border border-slate-200/90 p-3.5 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-start justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">#ORD-018</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-brand-blue">Meja 06</span>
+                </div>
+                <h3 class="font-bold text-sm text-slate-900 mt-1">Bambang Irawan</h3>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-slate-400 font-mono">12:28 WIB</span>
+              </div>
+            </div>
+
+            <div class="space-y-1 mb-3 text-xs bg-slate-50/70 p-2 rounded-lg border border-slate-100">
+              <div class="flex justify-between items-center text-slate-800">
+                <span class="font-medium">1x Mie Ayam Pangsit Bakso</span>
+                <span class="font-mono text-slate-600">Stan 01</span>
+              </div>
+            </div>
+
+            <button class="w-full py-2.5 px-3 bg-slate-900 hover:bg-black text-white font-bold text-xs rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors">
+              <span class="material-symbols-outlined text-[18px] text-emerald-400">task_alt</span>
+              <span>Selesaikan Pesanan</span>
+            </button>
+          </article>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- QUICK ACTION FOOTER BAR / STATUS SUMMARY -->
+  <footer class="bg-white border-t border-slate-200 py-2.5 px-6">
+    <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-slate-600">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span class="font-semibold text-slate-800">Dapur Siaga:</span>
+          <span>Stan 01 (OK), Stan 03 (OK), Stan 05 (OK)</span>
+        </div>
+        <span class="text-slate-300">|</span>
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-brand-blue">print</span>
+          <span>Printer Kasir: <strong class="text-slate-800">Thermal Epson TM-T82 (Tersambung)</strong></span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-[11px] text-slate-400">Pintasan Keyboard: <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[10px]">F2</kbd> Kasir Baru | <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[10px]">F4</kbd> Verifikasi QRIS | <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded font-mono text-[10px]">Space</kbd> Detail</span>
+        <button class="text-slate-700 hover:text-slate-900 font-semibold text-xs flex items-center gap-1 hover:underline">
+          <span class="material-symbols-outlined text-[16px]">settings</span>
+          <span>Pengaturan Panel</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

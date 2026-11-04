@@ -4,6 +4,7 @@ import { api } from '../services/api';
 import { Order, DashboardMetrics } from '../types';
 import { MetricsCard } from '../components/admin/MetricsCard';
 import { MenuManagerModal } from '../components/admin/MenuManagerModal';
+import { formatWIBDateTime } from '../services/time';
 import { StatusBadge } from '../components/common/StatusBadge';
 
 export const AdminReports: React.FC = () => {
@@ -163,12 +164,7 @@ export const AdminReports: React.FC = () => {
                     <tr key={o.id} className="hover:bg-slate-50/60 transition-colors">
                       <td className="py-3 px-4 font-bold text-primary">{o.order_number}</td>
                       <td className="py-3 px-4 text-slate-500 whitespace-nowrap">
-                        {new Date(o.created_at).toLocaleString('id-ID', {
-                          day: '2-digit',
-                          month: 'short',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                        {formatWIBDateTime(o.created_at)}
                       </td>
                       <td className="py-3 px-4">
                         <span className="font-bold text-slate-800 block">{o.guest_name}</span>

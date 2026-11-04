@@ -4,6 +4,7 @@ import {
   CheckoutPayload,
   OrderStatus,
   DashboardMetrics,
+  PublicQueueResponse,
 } from '../types';
 
 const API_BASE = '/api';
@@ -84,6 +85,18 @@ export const api = {
   async getOrder(id: string): Promise<Order> {
     const res = await fetch(`${API_BASE}/orders/${id}`);
     return handleResponse<Order>(res);
+  },
+
+  async cancelOrder(orderId: string): Promise<Order> {
+    const res = await fetch(`${API_BASE}/orders/${orderId}/cancel`, {
+      method: 'POST',
+    });
+    return handleResponse<Order>(res);
+  },
+
+  async getPublicQueue(): Promise<PublicQueueResponse> {
+    const res = await fetch(`${API_BASE}/orders/queue`);
+    return handleResponse<PublicQueueResponse>(res);
   },
 
   async uploadProof(orderId: string, file: File): Promise<Order> {

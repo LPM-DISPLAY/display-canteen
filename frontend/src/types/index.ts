@@ -84,3 +84,18 @@ export interface DashboardMetrics {
     qris: number;
   };
 }
+
+export interface PublicQueueItem {
+  id: string;
+  order_number: string;
+  guest_name: string;
+  status: OrderStatus;
+  estimated_ready_at?: string | null;
+  created_at: string;
+}
+
+export interface PublicQueueResponse {
+  processing: PublicQueueItem[];
+  ready: PublicQueueItem[];
+  server_time_wib: string;
+}

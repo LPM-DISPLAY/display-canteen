@@ -1,6 +1,7 @@
 import React from 'react';
 import { Order, OrderStatus } from '../../types';
 import { StatusBadge } from '../common/StatusBadge';
+import { formatWIB } from '../../services/time';
 
 interface OrderCardProps {
   order: Order;
@@ -20,6 +21,9 @@ export const OrderCard: React.FC<OrderCardProps> = ({
         <div className="flex items-center gap-2">
           <span className="font-extrabold text-base text-primary tracking-tight">
             {order.order_number}
+          </span>
+          <span className="text-[10px] text-slate-400 font-semibold">
+            {formatWIB(order.created_at)}
           </span>
           <span
             className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${

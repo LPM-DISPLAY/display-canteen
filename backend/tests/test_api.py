@@ -102,3 +102,77 @@ def test_checkout_max_flavors_exceeded():
         res = client.post("/api/orders/checkout", json=payload)
         # Should be rejected because max_length=2 in schema or 400 in validation
         assert res.status_code in [400, 422]
+
+def test_checkout_zero_topping_original():
+    with TestClient(app) as client:
+        menus = client.get("/api/menus").json()
+        menu_id = menus[0]["id"]
+
+        # 0 toppings (Original)
+        payload = {
+            "guest_name": "Siti Original",
+            "guest_wa": "081298765432",
+            "payment_method": "CASH",
+            "items": [
+                {
+                    "menu_id": menu_id,
+                    "quantity": 1,
+                    "flavors": [],
+                    "notes": "Roti bakar polos mentega"
+                }
+            ]
+        }
+        res = client.post("/api/orders/checkout", json=payload)
+        assert res.status_code == 201
+        order = res.json()
+        assert order["total_amount"] == 6000
+        assert order["items"][0]["selected_flavors"] == ""
+
+def test_order_self_cancel_and_queue():
+    with TestClient(app) as client:
+        menus = client.get("/api/menus").json()
+        menu_id = menus[0]["id"]
+
+        # 1. Place order
+        payload = {
+            "guest_name": "Andi Batal",
+            "guest_wa": "081211112222",
+            "payment_method": "CASH",
+            "items": [
+                {
+                    "menu_id": menu_id,
+                    "quantity": 1,
+                    "flavors": ["Cokelat"],
+                }
+            ]
+        }
+        res = client.post("/api/orders/checkout", json=payload)
+        assert res.status_code == 201
+        order_id = res.json()["id"]
+
+        # 2. Cancel order while PENDING_PAYMENT -> success
+        cancel_res = client.post(f"/api/orders/{order_id}/cancel")
+        assert cancel_res.status_code == 200
+        assert cancel_res.json()["status"] == "CANCELLED"
+
+        # 3. Create another order and set to PROCESSING
+        res2 = client.post("/api/orders/checkout", json=payload)
+        order_id_2 = res2.json()["id"]
+
+        client.put(
+            f"/api/orders/{order_id_2}/status",
+            json={"status": "PROCESSING"},
+            headers={"X-Admin-Secret": settings.ADMIN_SECRET_KEY}
+        )
+
+        # 4. Attempt to cancel PROCESSING order -> must fail with 400
+        cancel_fail = client.post(f"/api/orders/{order_id_2}/cancel")
+        assert cancel_fail.status_code == 400
+
+        # 5. Check public queue endpoint
+        queue_res = client.get("/api/orders/queue")
+        assert queue_res.status_code == 200
+        q_data = queue_res.json()
+        assert "server_time_wib" in q_data
+        assert "WIB" in q_data["server_time_wib"]
+        assert any(item["id"] == order_id_2 for item in q_data["processing"])

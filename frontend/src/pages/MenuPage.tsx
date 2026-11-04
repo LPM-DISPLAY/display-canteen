@@ -7,15 +7,19 @@ import { Header } from '../components/common/Header';
 import { RotiCustomizer } from '../components/guest/RotiCustomizer';
 import { FlavorSelector } from '../components/guest/FlavorSelector';
 import { CartDrawer } from '../components/guest/CartDrawer';
+import { CartBottomBar } from '../components/guest/CartBottomBar';
+import { OrdersDrawer } from '../components/guest/OrdersDrawer';
 
 export const MenuPage: React.FC = () => {
   const navigate = useNavigate();
   const { addItem } = useCart();
   const [menu, setMenu] = useState<MenuItem | null>(null);
-  const [selectedFlavors, setSelectedFlavors] = useState<FlavorVariant[]>(['Cokelat']);
+  const [selectedFlavors, setSelectedFlavors] = useState<FlavorVariant[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState('');
   const [showAddedToast, setShowAddedToast] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isOrdersOpen, setIsOrdersOpen] = useState(false);
 
   useEffect(() => {
     async function loadMenu() {
@@ -54,91 +58,82 @@ export const MenuPage: React.FC = () => {
 
   const handleAddToCart = () => {
     if (!menu) return;
-    if (selectedFlavors.length === 0) {
-      alert('Pilih minimal 1 varian rasa terlebih dahulu!');
-      return;
-    }
+
+    const itemName =
+      selectedFlavors.length === 0
+        ? 'Roti Bakar Original'
+        : menu.name;
 
     addItem({
       menu_id: menu.id,
-      name: menu.name,
+      name: itemName,
       flavors: [...selectedFlavors],
       price: unitPrice,
       quantity,
       notes: notes.trim() || undefined,
     });
 
-    // Reset notes and trigger confirmation toast
+    // Reset notes, keep flavor for quick multi-order, and trigger confirmation toast
     setNotes('');
     setShowAddedToast(true);
     setTimeout(() => setShowAddedToast(false), 2000);
   };
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-[#F8FAFC] flex flex-col pb-28 relative shadow-lg">
-      <Header />
+    <div className="max-w-md mx-auto min-h-screen bg-[#F8FAFC] flex flex-col justify-between pb-24 relative shadow-lg">
+      <Header
+        onOpenCart={() => setIsCartOpen(true)}
+        onOpenOrders={() => setIsOrdersOpen(true)}
+      />
 
       {/* Added Toast Notification */}
       {showAddedToast && (
-        <div className="fixed top-16 inset-x-0 z-50 flex justify-center pointer-events-none px-4 animate-fade-in">
+        <div className="fixed top-14 inset-x-0 z-50 flex justify-center pointer-events-none px-4 animate-fade-in">
           <div className="bg-emerald-600 text-white px-4 py-2 rounded-full shadow-lg text-xs font-bold flex items-center gap-2">
             <span className="material-symbols-outlined text-[18px]">check_circle</span>
-            Roti Bakar berhasil masuk keranjang!
+            Roti Bakar masuk ke keranjang!
           </div>
         </div>
       )}
 
-      <main className="flex-1 px-4 pt-3 space-y-4">
-        {/* Banner Tagline */}
-        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/15 rounded-2xl p-3 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-[18px]">local_fire_department</span>
-            </span>
-            <div>
-              <p className="text-xs font-bold text-primary">Roti Bakar Hangat & Crispy</p>
-              <p className="text-[11px] text-slate-500 font-medium">Bebas pilih hingga 2 rasa topping lezat</p>
-            </div>
-          </div>
-          <span className="text-xs font-bold text-slate-700 bg-white px-2 py-1 rounded-lg border border-slate-200">
-            Rp 6.000 / porsi
-          </span>
-        </div>
-
-        {/* Center Toast Customizer Stage */}
-        <div className="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs flex flex-col items-center">
+      <main className="flex-1 px-3.5 pt-2 space-y-2.5">
+        {/* Center Toast Customizer Stage (Compact & Single-screen fit) */}
+        <div className="bg-white rounded-3xl p-3 border border-slate-200/80 shadow-xs flex flex-col items-center">
           <RotiCustomizer
             selectedFlavors={selectedFlavors}
             onRemoveFlavor={handleRemoveFlavor}
+            compact={true}
           />
 
-          {/* Unit Price Display */}
-          <div className="w-full mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+          {/* Unit Price & Quantity Stepper */}
+          <div className="w-full mt-2 pt-2 border-t border-slate-100 flex items-center justify-between">
             <div>
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-                Harga Satuan
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                Harga Flat (Maks. 2 Topping)
               </span>
-              <span className="text-lg font-extrabold text-slate-900 tracking-tight">
+              <span className="text-base font-extrabold text-slate-900 tracking-tight">
                 Rp {unitPrice.toLocaleString('id-ID')}
               </span>
             </div>
 
             {/* Quantity Stepper */}
-            <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
+            <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-6 h-6 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 font-bold"
+                aria-label="Kurangi jumlah"
+                className="w-5 h-5 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 font-bold text-xs"
               >
                 -
               </button>
-              <span className="text-sm font-bold text-slate-800 min-w-4 text-center">
+              <span className="text-xs font-bold text-slate-800 min-w-4 text-center">
                 {quantity}
               </span>
               <button
                 type="button"
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-6 h-6 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 font-bold"
+                aria-label="Tambah jumlah"
+                className="w-5 h-5 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 font-bold text-xs"
               >
                 +
               </button>
@@ -146,8 +141,8 @@ export const MenuPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Flavor Selector Swatches */}
-        <div className="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-xs">
+        {/* Flavor Selector Swatches & Add Action */}
+        <div className="bg-white rounded-3xl p-3 border border-slate-200/80 shadow-xs space-y-2">
           <FlavorSelector
             selectedFlavors={selectedFlavors}
             onToggleFlavor={handleToggleFlavor}
@@ -155,13 +150,13 @@ export const MenuPage: React.FC = () => {
           />
 
           {/* Notes Input */}
-          <div className="mt-3">
+          <div>
             <input
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Catatan khusus (misal: jangan terlalu gosong)..."
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+              className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
             />
           </div>
 
@@ -169,16 +164,39 @@ export const MenuPage: React.FC = () => {
           <button
             type="button"
             onClick={handleAddToCart}
-            className="w-full mt-3.5 py-3 bg-primary hover:bg-primary-dark text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 active:scale-[0.99] transition-all"
+            className="w-full py-2.5 bg-primary hover:bg-primary-dark text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-2 active:scale-[0.99] transition-all"
           >
-            <span className="material-symbols-outlined text-[18px]">add_shopping_cart</span>
-            <span>Tambah ke Keranjang - Rp {itemTotal.toLocaleString('id-ID')}</span>
+            <span className="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+            <span>
+              {selectedFlavors.length === 0
+                ? `Tambah Roti Original - Rp ${itemTotal.toLocaleString('id-ID')}`
+                : `Tambah ke Keranjang - Rp ${itemTotal.toLocaleString('id-ID')}`}
+            </span>
           </button>
         </div>
       </main>
 
-      {/* Floating Bottom Drawer Cart */}
-      <CartDrawer onCheckout={() => navigate('/checkout')} />
+      {/* Sticky High-Contrast Bottom Cart Bar */}
+      <CartBottomBar
+        onOpenCart={() => setIsCartOpen(true)}
+        onCheckout={() => navigate('/checkout')}
+      />
+
+      {/* Cart Drawer Modal */}
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        onCheckout={() => {
+          setIsCartOpen(false);
+          navigate('/checkout');
+        }}
+      />
+
+      {/* My Orders History Drawer */}
+      <OrdersDrawer
+        isOpen={isOrdersOpen}
+        onClose={() => setIsOrdersOpen(false)}
+      />
     </div>
   );
 };

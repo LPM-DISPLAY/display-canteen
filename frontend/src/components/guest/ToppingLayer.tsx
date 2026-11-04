@@ -3,186 +3,374 @@ import { FlavorVariant } from '../../types';
 
 interface ToppingLayerProps {
   flavor: FlavorVariant;
+  splitSide?: 'left' | 'right' | 'full';
 }
 
-export const ToppingLayer: React.FC<ToppingLayerProps> = ({ flavor }) => {
+export const ToppingLayer: React.FC<ToppingLayerProps> = ({
+  flavor,
+  splitSide = 'full',
+}) => {
+  const clipId =
+    splitSide === 'left'
+      ? 'url(#clip-left-half)'
+      : splitSide === 'right'
+      ? 'url(#clip-right-half)'
+      : undefined;
+
   switch (flavor) {
     case 'Cokelat':
+      // Realistic Chocolate Meses (Sprinkles)
       return (
-        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center p-3">
-          {/* Chocolate drizzle pattern */}
-          <svg viewBox="0 0 200 160" className="w-full h-full drop-shadow-md">
-            <path
-              d="M 25 35 Q 55 55 85 30 T 145 40 T 180 30"
-              fill="none"
-              stroke="#4A2810"
-              strokeWidth="9"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 20 70 Q 60 90 100 65 T 150 75 T 185 60"
-              fill="none"
-              stroke="#5C3826"
-              strokeWidth="11"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 30 110 Q 70 130 110 105 T 160 115 T 175 100"
-              fill="none"
-              stroke="#4A2810"
-              strokeWidth="9"
-              strokeLinecap="round"
-            />
-            {/* Chocolate chips / curls */}
-            <circle cx="50" cy="50" r="4" fill="#381D0B" />
-            <circle cx="120" cy="45" r="4.5" fill="#381D0B" />
-            <circle cx="80" cy="85" r="5" fill="#381D0B" />
-            <circle cx="150" cy="95" r="4" fill="#381D0B" />
-            <circle cx="100" cy="125" r="4" fill="#381D0B" />
+        <div
+          className={`absolute inset-0 pointer-events-none animate-topping-bounce z-20 ${
+            splitSide === 'left'
+              ? 'w-1/2 overflow-hidden left-0'
+              : splitSide === 'right'
+              ? 'w-1/2 overflow-hidden left-1/2'
+              : 'w-full'
+          }`}
+        >
+          <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-sm">
+            <defs>
+              <filter id="meses-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0.5" dy="1" stdDeviation="0.8" floodColor="#1C0D02" floodOpacity="0.7" />
+              </filter>
+            </defs>
+
+            {/* Densely scattered Chocolate Meses */}
+            <g filter="url(#meses-shadow)">
+              {/* Row 1 */}
+              <rect x="35" y="55" width="8" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(25 35 55)" />
+              <rect x="55" y="45" width="8.5" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-15 55 45)" />
+              <rect x="75" y="50" width="9" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(40 75 50)" />
+              <rect x="95" y="42" width="8" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-30 95 42)" />
+              <rect x="115" y="48" width="9" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(10 115 48)" />
+              <rect x="135" y="45" width="8" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(-45 135 45)" />
+              <rect x="155" y="52" width="8.5" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(20 155 52)" />
+              <rect x="175" y="58" width="8" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(-20 175 58)" />
+
+              {/* Row 2 */}
+              <rect x="40" y="75" width="8.5" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-35 40 75)" />
+              <rect x="60" y="70" width="9" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(15 60 70)" />
+              <rect x="80" y="78" width="8" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(-50 80 78)" />
+              <rect x="100" y="68" width="9" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(30 100 68)" />
+              <rect x="120" y="75" width="8" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(-10 120 75)" />
+              <rect x="140" y="70" width="8.5" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(45 140 70)" />
+              <rect x="160" y="76" width="9" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-25 160 76)" />
+              <rect x="180" y="80" width="8" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(15 180 80)" />
+
+              {/* Row 3 - Center Dense */}
+              <rect x="32" y="98" width="8.5" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(10 32 98)" />
+              <rect x="52" y="95" width="9" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-40 52 95)" />
+              <rect x="72" y="100" width="8.5" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(25 72 100)" />
+              <rect x="92" y="92" width="9" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(-15 92 92)" />
+              <rect x="112" y="98" width="8" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(55 112 98)" />
+              <rect x="132" y="94" width="9" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(-30 132 94)" />
+              <rect x="152" y="102" width="8.5" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(20 152 102)" />
+              <rect x="172" y="96" width="9" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-45 172 96)" />
+
+              {/* Row 4 */}
+              <rect x="42" y="122" width="9" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-20 42 122)" />
+              <rect x="64" y="118" width="8" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(35 64 118)" />
+              <rect x="85" y="125" width="8.5" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(-10 85 125)" />
+              <rect x="105" y="119" width="9" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(45 105 119)" />
+              <rect x="125" y="123" width="8" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(-35 125 123)" />
+              <rect x="145" y="117" width="9" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(15 145 117)" />
+              <rect x="165" y="124" width="8.5" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-50 165 124)" />
+
+              {/* Row 5 - Bottom Area */}
+              <rect x="45" y="145" width="8" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(30 45 145)" />
+              <rect x="68" y="142" width="9" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(-15 68 142)" />
+              <rect x="90" y="148" width="8.5" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(40 90 148)" />
+              <rect x="110" y="140" width="9" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(-25 110 140)" />
+              <rect x="130" y="146" width="8" height="3.2" rx="1.6" fill="#3D1E0B" transform="rotate(10 130 146)" />
+              <rect x="150" y="141" width="9" height="3.2" rx="1.6" fill="#1F0D04" transform="rotate(-40 150 141)" />
+              <rect x="170" y="147" width="8.5" height="3.2" rx="1.6" fill="#2B1408" transform="rotate(20 170 147)" />
+
+              {/* Sweet Condensed Milk Drizzle Accents */}
+              <path
+                d="M 35 70 Q 75 95 110 65 T 180 85"
+                fill="none"
+                stroke="#FFFBEB"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.75"
+              />
+              <path
+                d="M 40 115 Q 85 140 130 110 T 175 130"
+                fill="none"
+                stroke="#FFFBEB"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.75"
+              />
+            </g>
           </svg>
         </div>
       );
 
     case 'Keju':
+      // Abundant Curly Shredded Cheddar Cheese (Parutan Keju)
       return (
-        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center p-2">
-          {/* Shredded cheddar cheese strands */}
-          <svg viewBox="0 0 200 160" className="w-full h-full drop-shadow-sm">
-            <line x1="30" y1="35" x2="65" y2="38" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
-            <line x1="85" y1="28" x2="125" y2="35" stroke="#FCD34D" strokeWidth="4" strokeLinecap="round" />
-            <line x1="140" y1="32" x2="175" y2="40" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
-            <line x1="45" y1="65" x2="90" y2="60" stroke="#FCD34D" strokeWidth="5" strokeLinecap="round" />
-            <line x1="105" y1="68" x2="155" y2="62" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
-            <line x1="35" y1="95" x2="80" y2="102" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
-            <line x1="95" y1="92" x2="140" y2="98" stroke="#FCD34D" strokeWidth="5" strokeLinecap="round" />
-            <line x1="145" y1="105" x2="178" y2="95" stroke="#F59E0B" strokeWidth="4" strokeLinecap="round" />
-            <line x1="55" y1="125" x2="100" y2="120" stroke="#FCD34D" strokeWidth="4" strokeLinecap="round" />
-            <line x1="115" y1="128" x2="160" y2="122" stroke="#F59E0B" strokeWidth="4.5" strokeLinecap="round" />
+        <div
+          className={`absolute inset-0 pointer-events-none animate-topping-bounce z-25 ${
+            splitSide === 'left'
+              ? 'w-1/2 overflow-hidden left-0'
+              : splitSide === 'right'
+              ? 'w-1/2 overflow-hidden left-1/2'
+              : 'w-full'
+          }`}
+        >
+          <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-sm">
+            <defs>
+              <filter id="cheese-shadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0.5" dy="1" stdDeviation="0.6" floodColor="#92400E" floodOpacity="0.4" />
+              </filter>
+            </defs>
+
+            <g filter="url(#cheese-shadow)">
+              {/* Dense shredded cheddar strands (curved lines) */}
+              {/* Top Layer */}
+              <path d="M 35 48 Q 55 42 75 49" fill="none" stroke="#F59E0B" strokeWidth="3.2" strokeLinecap="round" />
+              <path d="M 50 44 Q 70 52 95 46" fill="none" stroke="#FCD34D" strokeWidth="2.8" strokeLinecap="round" />
+              <path d="M 85 40 Q 110 46 135 41" fill="none" stroke="#FEF08A" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 120 45 Q 145 38 170 47" fill="none" stroke="#F59E0B" strokeWidth="3.2" strokeLinecap="round" />
+              <path d="M 145 42 Q 165 50 185 45" fill="none" stroke="#FCD34D" strokeWidth="2.8" strokeLinecap="round" />
+
+              {/* Upper-Middle Layer */}
+              <path d="M 30 68 Q 55 60 80 66" fill="none" stroke="#FCD34D" strokeWidth="3.2" strokeLinecap="round" />
+              <path d="M 65 62 Q 95 72 120 64" fill="none" stroke="#FEF08A" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 105 66 Q 130 58 155 67" fill="none" stroke="#F59E0B" strokeWidth="3.5" strokeLinecap="round" />
+              <path d="M 140 60 Q 165 68 190 62" fill="none" stroke="#FCD34D" strokeWidth="3" strokeLinecap="round" />
+
+              {/* Cross Shreads */}
+              <path d="M 45 60 Q 60 78 75 92" fill="none" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 85 55 Q 98 75 110 95" fill="none" stroke="#FEF08A" strokeWidth="3.2" strokeLinecap="round" />
+              <path d="M 130 58 Q 142 80 155 98" fill="none" stroke="#FCD34D" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 165 65 Q 175 85 182 105" fill="none" stroke="#F59E0B" strokeWidth="2.8" strokeLinecap="round" />
+
+              {/* Center Mountain Layer */}
+              <path d="M 32 92 Q 62 84 92 90" fill="none" stroke="#FEF08A" strokeWidth="3.5" strokeLinecap="round" />
+              <path d="M 75 88 Q 105 98 135 90" fill="none" stroke="#F59E0B" strokeWidth="3.8" strokeLinecap="round" />
+              <path d="M 115 92 Q 145 84 175 92" fill="none" stroke="#FCD34D" strokeWidth="3.5" strokeLinecap="round" />
+              <path d="M 40 108 Q 70 118 100 110" fill="none" stroke="#FCD34D" strokeWidth="3.2" strokeLinecap="round" />
+              <path d="M 85 106 Q 115 98 145 107" fill="none" stroke="#FEF08A" strokeWidth="3.8" strokeLinecap="round" />
+              <path d="M 130 112 Q 160 102 188 114" fill="none" stroke="#F59E0B" strokeWidth="3.2" strokeLinecap="round" />
+
+              {/* Lower Shreads */}
+              <path d="M 35 130 Q 65 124 95 131" fill="none" stroke="#F59E0B" strokeWidth="3.2" strokeLinecap="round" />
+              <path d="M 78 126 Q 108 136 138 128" fill="none" stroke="#FEF08A" strokeWidth="3.5" strokeLinecap="round" />
+              <path d="M 120 132 Q 150 124 180 133" fill="none" stroke="#FCD34D" strokeWidth="3.2" strokeLinecap="round" />
+
+              {/* Bottom Rim Shreads */}
+              <path d="M 45 152 Q 75 146 105 153" fill="none" stroke="#FEF08A" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 90 148 Q 120 156 150 150" fill="none" stroke="#F59E0B" strokeWidth="3.2" strokeLinecap="round" />
+              <path d="M 135 152 Q 160 146 182 154" fill="none" stroke="#FCD34D" strokeWidth="2.8" strokeLinecap="round" />
+            </g>
           </svg>
         </div>
       );
 
     case 'Strawberry':
+      // Glossy Strawberry Jam Spread
       return (
-        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center p-3">
-          {/* Strawberry jam coulis with seeds */}
-          <svg viewBox="0 0 200 160" className="w-full h-full drop-shadow-md">
-            <path
-              d="M 35 45 Q 70 20 110 50 Q 150 25 175 55 Q 160 95 140 125 Q 90 140 50 115 Q 25 80 35 45 Z"
-              fill="#E11D48"
-              fillOpacity="0.82"
-            />
-            <path
-              d="M 50 55 Q 85 35 120 60 Q 140 75 125 105 Q 80 120 55 95 Z"
-              fill="#BE123C"
-              fillOpacity="0.6"
-            />
-            {/* Seeds */}
-            <circle cx="65" cy="55" r="2" fill="#FEF08A" />
-            <circle cx="105" cy="45" r="2" fill="#FEF08A" />
-            <circle cx="145" cy="65" r="2" fill="#FEF08A" />
-            <circle cx="85" cy="85" r="2" fill="#FEF08A" />
-            <circle cx="125" cy="95" r="2" fill="#FEF08A" />
-            <circle cx="70" cy="110" r="2" fill="#FEF08A" />
+        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
+          <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
+            <defs>
+              <clipPath id="clip-left-half">
+                <rect x="0" y="0" width="110" height="200" />
+              </clipPath>
+              <clipPath id="clip-right-half">
+                <rect x="110" y="0" width="110" height="200" />
+              </clipPath>
+              <linearGradient id="strawberry-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#E11D48" stopOpacity="0.92" />
+                <stop offset="50%" stopColor="#BE123C" stopOpacity="0.88" />
+                <stop offset="100%" stopColor="#9F1239" stopOpacity="0.94" />
+              </linearGradient>
+            </defs>
+
+            <g clipPath={clipId}>
+              {/* Thick Jam spread base */}
+              <path
+                d="M 32 60 Q 70 30 110 50 Q 150 30 188 60 Q 182 110 178 165 Q 110 175 42 165 Q 38 110 32 60 Z"
+                fill="url(#strawberry-grad)"
+              />
+              {/* Glossy Jam highlights */}
+              <path
+                d="M 45 68 Q 80 48 115 62 Q 150 50 172 70"
+                fill="none"
+                stroke="#FECDD3"
+                strokeWidth="4"
+                strokeLinecap="round"
+                opacity="0.6"
+              />
+              <path
+                d="M 50 110 Q 90 95 130 108 Q 160 100 170 120"
+                fill="none"
+                stroke="#FECDD3"
+                strokeWidth="3"
+                strokeLinecap="round"
+                opacity="0.45"
+              />
+              {/* Real fruit pulp seeds */}
+              <circle cx="60" cy="72" r="1.8" fill="#FEF08A" />
+              <circle cx="95" cy="62" r="2" fill="#FEF08A" />
+              <circle cx="140" cy="75" r="1.8" fill="#FEF08A" />
+              <circle cx="75" cy="115" r="2" fill="#FEF08A" />
+              <circle cx="120" cy="105" r="2" fill="#FEF08A" />
+              <circle cx="155" cy="118" r="1.8" fill="#FEF08A" />
+              <circle cx="85" cy="145" r="2" fill="#FEF08A" />
+              <circle cx="135" cy="148" r="1.8" fill="#FEF08A" />
+            </g>
           </svg>
         </div>
       );
 
     case 'Blueberry':
+      // Rich Deep Blueberry Jam Spread
       return (
-        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center p-3">
-          {/* Blueberry deep glaze & berries */}
-          <svg viewBox="0 0 200 160" className="w-full h-full drop-shadow-md">
-            <path
-              d="M 30 50 Q 75 30 115 55 Q 165 35 180 70 Q 165 110 135 130 Q 80 140 45 110 Q 20 75 30 50 Z"
-              fill="#4338CA"
-              fillOpacity="0.82"
-            />
-            {/* Wild berries */}
-            <circle cx="60" cy="65" r="8" fill="#312E81" />
-            <circle cx="115" cy="55" r="9" fill="#312E81" />
-            <circle cx="150" cy="75" r="8.5" fill="#312E81" />
-            <circle cx="85" cy="95" r="8.5" fill="#312E81" />
-            <circle cx="130" cy="105" r="8" fill="#312E81" />
+        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
+          <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
+            <defs>
+              <linearGradient id="blueberry-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#4338CA" stopOpacity="0.94" />
+                <stop offset="50%" stopColor="#3730A3" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#312E81" stopOpacity="0.96" />
+              </linearGradient>
+            </defs>
+
+            <g clipPath={clipId}>
+              {/* Deep Blueberry Spread */}
+              <path
+                d="M 32 60 Q 70 30 110 50 Q 150 30 188 60 Q 182 110 178 165 Q 110 175 42 165 Q 38 110 32 60 Z"
+                fill="url(#blueberry-grad)"
+              />
+              {/* Specular Jam Sheen */}
+              <path
+                d="M 45 68 Q 80 48 115 62 Q 150 50 172 70"
+                fill="none"
+                stroke="#C7D2FE"
+                strokeWidth="4"
+                strokeLinecap="round"
+                opacity="0.55"
+              />
+              <path
+                d="M 50 112 Q 95 98 135 110 Q 160 102 170 122"
+                fill="none"
+                stroke="#C7D2FE"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+                opacity="0.45"
+              />
+              {/* Whole wild berry accents */}
+              <circle cx="65" cy="80" r="5" fill="#1E1B4B" />
+              <circle cx="66" cy="79" r="1.5" fill="#E0E7FF" opacity="0.7" />
+              <circle cx="115" cy="72" r="5.5" fill="#1E1B4B" />
+              <circle cx="116" cy="71" r="1.5" fill="#E0E7FF" opacity="0.7" />
+              <circle cx="155" cy="88" r="5" fill="#1E1B4B" />
+              <circle cx="156" cy="87" r="1.5" fill="#E0E7FF" opacity="0.7" />
+              <circle cx="85" cy="125" r="5" fill="#1E1B4B" />
+              <circle cx="86" cy="124" r="1.5" fill="#E0E7FF" opacity="0.7" />
+              <circle cx="135" cy="132" r="5.5" fill="#1E1B4B" />
+              <circle cx="136" cy="131" r="1.5" fill="#E0E7FF" opacity="0.7" />
+            </g>
           </svg>
         </div>
       );
 
     case 'Tiramisu':
+      // Mascarpone & Espresso Ganache Spread
       return (
-        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center p-3">
-          {/* Tiramisu mascarpone swirls and espresso dust */}
-          <svg viewBox="0 0 200 160" className="w-full h-full drop-shadow-md">
-            <path
-              d="M 35 40 Q 75 60 115 35 T 175 45"
-              fill="none"
-              stroke="#FEF3C7"
-              strokeWidth="12"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 25 75 Q 80 100 125 70 T 180 80"
-              fill="none"
-              stroke="#FEF3C7"
-              strokeWidth="14"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 35 115 Q 85 135 130 110 T 170 120"
-              fill="none"
-              stroke="#FEF3C7"
-              strokeWidth="12"
-              strokeLinecap="round"
-            />
-            {/* Cocoa dust stipples */}
-            <circle cx="45" cy="40" r="3" fill="#92400E" />
-            <circle cx="75" cy="55" r="3.5" fill="#78350F" />
-            <circle cx="115" cy="40" r="3" fill="#92400E" />
-            <circle cx="155" cy="50" r="3" fill="#78350F" />
-            <circle cx="60" cy="80" r="3.5" fill="#92400E" />
-            <circle cx="100" cy="75" r="3" fill="#78350F" />
-            <circle cx="140" cy="85" r="3.5" fill="#92400E" />
-            <circle cx="70" cy="120" r="3" fill="#92400E" />
-            <circle cx="120" cy="115" r="3.5" fill="#78350F" />
+        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
+          <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
+            <defs>
+              <linearGradient id="tiramisu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#92400E" stopOpacity="0.9" />
+                <stop offset="50%" stopColor="#B45309" stopOpacity="0.88" />
+                <stop offset="100%" stopColor="#78350F" stopOpacity="0.94" />
+              </linearGradient>
+            </defs>
+
+            <g clipPath={clipId}>
+              {/* Rich Coffee Ganache Spread */}
+              <path
+                d="M 32 60 Q 70 30 110 50 Q 150 30 188 60 Q 182 110 178 165 Q 110 175 42 165 Q 38 110 32 60 Z"
+                fill="url(#tiramisu-grad)"
+              />
+              {/* Mascarpone Cream Waves */}
+              <path
+                d="M 40 70 Q 75 88 110 65 T 180 75"
+                fill="none"
+                stroke="#FEF3C7"
+                strokeWidth="7"
+                strokeLinecap="round"
+                opacity="0.85"
+              />
+              <path
+                d="M 35 115 Q 80 135 125 110 T 178 120"
+                fill="none"
+                stroke="#FEF3C7"
+                strokeWidth="7"
+                strokeLinecap="round"
+                opacity="0.85"
+              />
+              {/* Cocoa Dust Stippling */}
+              <circle cx="55" cy="62" r="2.2" fill="#451A03" />
+              <circle cx="95" cy="78" r="2.5" fill="#451A03" />
+              <circle cx="145" cy="66" r="2.2" fill="#451A03" />
+              <circle cx="70" cy="120" r="2.5" fill="#451A03" />
+              <circle cx="120" cy="112" r="2.2" fill="#451A03" />
+              <circle cx="160" cy="125" r="2.5" fill="#451A03" />
+            </g>
           </svg>
         </div>
       );
 
     case 'Green Tea':
+      // Matcha Glaze Ganache Spread
       return (
-        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center p-3">
-          {/* Matcha ganache drizzle & powder */}
-          <svg viewBox="0 0 200 160" className="w-full h-full drop-shadow-md">
-            <path
-              d="M 30 35 Q 70 55 105 30 T 175 40"
-              fill="none"
-              stroke="#65A30D"
-              strokeWidth="10"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 25 70 Q 75 95 120 65 T 180 75"
-              fill="none"
-              stroke="#4D7C0F"
-              strokeWidth="12"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 30 110 Q 75 130 120 105 T 170 115"
-              fill="none"
-              stroke="#65A30D"
-              strokeWidth="10"
-              strokeLinecap="round"
-            />
-            {/* Fine matcha powder specks */}
-            <circle cx="55" cy="48" r="2.5" fill="#365314" />
-            <circle cx="95" cy="42" r="3" fill="#365314" />
-            <circle cx="145" cy="48" r="2.5" fill="#365314" />
-            <circle cx="65" cy="85" r="3" fill="#365314" />
-            <circle cx="110" cy="80" r="2.5" fill="#365314" />
-            <circle cx="150" cy="88" r="3" fill="#365314" />
-            <circle cx="85" cy="122" r="2.5" fill="#365314" />
-            <circle cx="135" cy="118" r="3" fill="#365314" />
+        <div className="absolute inset-0 pointer-events-none animate-topping-bounce z-10 flex items-center justify-center">
+          <svg viewBox="0 0 220 200" className="w-full h-full drop-shadow-md">
+            <defs>
+              <linearGradient id="matcha-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#65A30D" stopOpacity="0.92" />
+                <stop offset="50%" stopColor="#4D7C0F" stopOpacity="0.88" />
+                <stop offset="100%" stopColor="#3F6212" stopOpacity="0.95" />
+              </linearGradient>
+            </defs>
+
+            <g clipPath={clipId}>
+              {/* Thick Matcha Ganache Spread */}
+              <path
+                d="M 32 60 Q 70 30 110 50 Q 150 30 188 60 Q 182 110 178 165 Q 110 175 42 165 Q 38 110 32 60 Z"
+                fill="url(#matcha-grad)"
+              />
+              {/* White Ganache Drizzle Swirls */}
+              <path
+                d="M 40 68 Q 80 50 120 65 Q 150 52 175 70"
+                fill="none"
+                stroke="#ECFCCB"
+                strokeWidth="5"
+                strokeLinecap="round"
+                opacity="0.75"
+              />
+              <path
+                d="M 42 115 Q 85 98 128 112 Q 155 102 172 122"
+                fill="none"
+                stroke="#ECFCCB"
+                strokeWidth="4.5"
+                strokeLinecap="round"
+                opacity="0.75"
+              />
+              {/* Fine Matcha Powder Specks */}
+              <circle cx="55" cy="75" r="1.8" fill="#1A2E05" />
+              <circle cx="105" cy="62" r="2" fill="#1A2E05" />
+              <circle cx="150" cy="78" r="1.8" fill="#1A2E05" />
+              <circle cx="75" cy="125" r="2" fill="#1A2E05" />
+              <circle cx="125" cy="118" r="1.8" fill="#1A2E05" />
+              <circle cx="155" cy="130" r="2" fill="#1A2E05" />
+            </g>
           </svg>
         </div>
       );

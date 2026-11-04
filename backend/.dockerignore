@@ -1,0 +1,11 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+canteen_dev.db
+*.db
+uploads/*
+!uploads/.gitkeep
